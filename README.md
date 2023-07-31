@@ -4,7 +4,7 @@ https://yahya-tamur.github.io/visualizing-complex-functions-2/doc/a.html
 
 in progress. rewrite of older project I had.
 
-# Running the Program Locally
+## Running the Program Locally
 
 The rust crate on 'complex-gifs' contains the library for making the images as
 well as the code the create each image as examples.
@@ -14,7 +14,7 @@ From the 'doc' folder, 'make doc' compiles the tex into html (may require variou
 'make clean' deletes the build files, which unfortunately includes the images created
 by 'make image'.
 
-# Goals
+## Goals
 
 - create gifs to display the complex functions (similar to older project)
 - make gif of sphere with stereographic projection
