@@ -4,7 +4,7 @@ use std::env;
 fn main() {
     let path = env::args()
         .nth(1)
-        .unwrap_or("../images/example2.gif".to_string());
+        .unwrap_or("../images/z_contour.gif".to_string());
 
     let gradient: Vec<[u8; 3]> = (0..255).map(|x| [255, x, x]).collect();
 
