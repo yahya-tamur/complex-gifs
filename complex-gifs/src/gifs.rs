@@ -1,5 +1,6 @@
 use gif::Encoder;
 pub use num_complex::Complex64;
+use rayon::prelude::*;
 use std::f64::consts::PI;
 
 pub struct ImageParameters {
@@ -20,14 +21,13 @@ fn to_complex(im: &ImageParameters, r: u16, c: u16) -> Complex64 {
     )
 }
 
-
 fn index(index_max: usize, z: Complex64) -> usize {
-  let i = ((z.arg() + PI) / (2f64 * PI) * (index_max as f64)) as usize;
-  if i < index_max {
-    i
-  } else {
-    0
-  }
+    let i = ((z.arg() + PI) / (2f64 * PI) * (index_max as f64)) as usize;
+    if i < index_max {
+        i
+    } else {
+        0
+    }
 }
 
 #[derive(Debug, Clone, Copy)]
@@ -40,10 +40,9 @@ fn index_contour(index_max: usize, ct: &ContourParameters, z: Complex64) -> Comp
     if (z.norm() % ct.contour_spacing) < ct.contour_width {
         ComplexInfo::Contour
     } else {
-      ComplexInfo::Index(index(index_max, z))
+        ComplexInfo::Index(index(index_max, z))
     }
 }
-
 
 pub fn create_gradient_image(
     im: &ImageParameters,
@@ -51,20 +50,23 @@ pub fn create_gradient_image(
     f: fn(Complex64) -> Complex64,
 ) {
     let n = gradient.len();
-    let color = |i: usize| gradient[i];
+    let color = |i| i as u8;
 
-    let v: Vec<u8> = (0..im.width)
-        .flat_map(|r: u16| {
-            (0..im.height).flat_map(move |c|
-              hc![color, index n , f , to_complex @ im, r, c ]
-            )
+    let plane_info: Vec<u8> = (0..im.width)
+        .into_par_iter()
+        .map(|r| {
+            (0..im.height)
+                .map(|c| hc![color, index n, f , to_complex @ im, r, c ])
+                .collect::<Vec<u8>>()
         })
+        .flatten()
         .collect();
 
+    let gradient = gradient.into_iter().flatten().collect::<Vec<u8>>();
     let mut image = std::fs::File::create(&im.path).unwrap();
     let mut encoder = Encoder::new(&mut image, im.width, im.height, &[]).unwrap();
     encoder.set_repeat(gif::Repeat::Infinite).unwrap();
-    let frame = gif::Frame::from_rgb(im.width, im.height, &v);
+    let frame = gif::Frame::from_palette_pixels(im.width, im.height, &plane_info, &gradient, None);
     encoder.write_frame(&frame).unwrap();
 }
 
@@ -76,105 +78,103 @@ pub struct ContourParameters {
 
 pub fn create_gradient_image_with_contours(
     im: &ImageParameters,
-    cm: &ContourParameters,
-    gradient: Vec<[u8; 3]>,
+    cp: &ContourParameters,
+    mut gradient: Vec<[u8; 3]>,
     f: fn(Complex64) -> Complex64,
 ) {
     let n = gradient.len();
-    let color = |ci: ComplexInfo| {
-      match ci {
-        ComplexInfo::Index(i) => gradient[i],
-        ComplexInfo::Contour => cm.contour_color,
-      }
+    gradient.push(cp.contour_color);
+    let color = |ci: ComplexInfo| match ci {
+        ComplexInfo::Index(i) => i as u8,
+        ComplexInfo::Contour => n as u8,
     };
 
-    let v: Vec<u8> = (0..im.width)
-        .flat_map(|r| {
-            (0..im.height).flat_map(move |c|
-              hc![ color, index_contour n cm , f , to_complex @ im, r, c]
-            )
+    let plane_info: Vec<u8> = (0..im.width)
+        .into_par_iter()
+        .map(|r| {
+            (0..im.height)
+                .map(|c| hc![color, index_contour n cp, f , to_complex @ im, r, c ])
+                .collect::<Vec<u8>>()
         })
+        .flatten()
         .collect();
+
+    let gradient = gradient.into_iter().flatten().collect::<Vec<u8>>();
 
     let mut image = std::fs::File::create(&im.path).unwrap();
     let mut encoder = Encoder::new(&mut image, im.width, im.height, &[]).unwrap();
     encoder.set_repeat(gif::Repeat::Infinite).unwrap();
-    let frame = gif::Frame::from_rgb(im.width, im.height, &v);
+    let frame = gif::Frame::from_palette_pixels(im.width, im.height, &plane_info, &gradient, None);
     encoder.write_frame(&frame).unwrap();
 }
 
 pub struct LoopParameters {
     pub argument_color: [u8; 3],
     pub background_color: [u8; 3],
-    pub angle_width: f64,   // = 2pi => whole plane is highlighted
+    pub angle_width: usize, // angle_width / frames of the range is highlighted
     pub frames: u16,
 }
 
-
-pub fn create_loop_image(im: &ImageParameters, lp: &LoopParameters, cp: &ContourParameters, f: fn(Complex64) -> Complex64) {
-    let angle_width_in_frames = (lp.angle_width / (2f64 * PI) * (lp.frames as f64)) as usize;
+pub fn create_loop_image(
+    im: &ImageParameters,
+    lp: &LoopParameters,
+    cp: &ContourParameters,
+    f: fn(Complex64) -> Complex64,
+) {
     //?? let contour_width_in_frames = (cp.contour_width / cp.contour_spacing * (lp.frames as f64)) as u16;
 
-    fn diff(i: usize, j: usize) -> usize {
-      if j >= i {
-        j - i
-      } else {
-        i - j
-      }
-    }
-
     fn loop_diff(i: usize, j: usize, n: usize) -> usize {
-      std::cmp::min(diff(i,j), diff(i, j+n))
+        if j >= i {
+            j - i
+        } else {
+            j + n - i
+        }
     }
 
     let plane_info: Vec<Vec<ComplexInfo>> = (0..im.width)
-      .map(|r| {
-        (0..im.height).map(|c| {
-            hc![index_contour lp.frames.into() cp, f , to_complex @ im, r, c ]
-        }).collect()
-      })
-    .collect();
+        .into_par_iter()
+        .map(|r| {
+            (0..im.height)
+                .map(|c| hc![index_contour lp.frames.into() cp, f , to_complex @ im, r, c ])
+                .collect()
+        })
+        .collect();
 
-    let get_plane_info = |r : usize, c : usize| plane_info[r][c];
+    let get_plane_info = |r: usize, c: usize| plane_info[r][c];
+
+    let palette = [cp.contour_color, lp.argument_color, lp.background_color]
+        .into_iter()
+        .flatten()
+        .collect::<Vec<u8>>();
+
+    let frames: Vec<gif::Frame> = (0..lp.frames)
+        .into_par_iter()
+        .map(|i| {
+            let v: Vec<u8> = (0..im.width)
+                .flat_map(|r| {
+                    (0..im.height).map(move |c| match get_plane_info(r as usize, c as usize) {
+                        ComplexInfo::Contour => 0,
+                        ComplexInfo::Index(j)
+                            if loop_diff(i.into(), j, lp.frames.into()) < lp.angle_width =>
+                        {
+                            1
+                        }
+                        _ => 2,
+                    })
+                })
+                .collect();
+
+            let mut frame =
+                gif::Frame::from_palette_pixels(im.width, im.height, &v, &palette, None);
+            frame.make_lzw_pre_encoded();
+            frame
+        })
+        .collect();
 
     let mut image = std::fs::File::create(&im.path).unwrap();
     let mut encoder = Encoder::new(&mut image, im.width, im.height, &[]).unwrap();
     encoder.set_repeat(gif::Repeat::Infinite).unwrap();
-    for i in 0..lp.frames {
-
-        let v: Vec<u8> = (0..im.width)
-            .flat_map(|r| {
-                (0..im.height).flat_map( move |c| {
-                    match get_plane_info(r as usize, c as usize) {
-                      ComplexInfo::Contour => cp.contour_color.clone(),
-                      ComplexInfo::Index(j) if loop_diff(i.into(), j, lp.frames.into()) < angle_width_in_frames => lp.argument_color.clone(),
-                      _ => lp.background_color.clone(),
-                    }
-                })
-            })
-        .collect();
-
-        let frame = gif::Frame::from_rgb(im.width, im.height, &v);
-        encoder.write_frame(&frame).unwrap();
+    for frame in frames {
+        encoder.write_lzw_pre_encoded_frame(&frame).unwrap();
     }
-
 }
-/*
-    //gives single
-    let frame_of_contour = |z: Complex64| {
-        if (z.norm() % lp.contour_spacing)
-            lp.contour_color
-        } else {
-           let index = ((z.arg() + PI) / (2f64 * PI) * (gradient.len() as f64)) as usize;
-            if index >= gradient.len() {
-                gradient[0]
-            } else {
-                gradient[index]
-            }
-        }
-    };
-*/
-/*
-let v: Vec<16> = (0..im.width)
-    .flat_map(|r| (0..im.height).map(|c|
-        */

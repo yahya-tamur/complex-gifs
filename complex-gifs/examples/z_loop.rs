@@ -6,7 +6,6 @@ fn main() {
         .nth(1)
         .unwrap_or("../images/z_loop.gif".to_string());
 
-
     let f = |z: Complex64| z;
 
     create_loop_image(
@@ -20,10 +19,10 @@ fn main() {
             height: 500,
         },
         &LoopParameters {
-          argument_color: [100, 0, 0],
-          background_color: [0, 0, 100],
-          angle_width: 0.1,
-          frames: 100,
+            argument_color: [100, 0, 0],
+            background_color: [50, 100, 200],
+            angle_width: 4,
+            frames: 200,
         },
         &ContourParameters {
             contour_spacing: 0.1f64,
