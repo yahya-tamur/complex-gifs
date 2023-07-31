@@ -16,13 +16,20 @@ by 'make image'.
 
 ## Goals
 
-- create gifs to display the complex functions (similar to older project)
 - make gif of sphere with stereographic projection
 - rayon to parallelize?
-- short writeup, like 5 pages max?
+- short writeup, like 5 pages max:
+  - az + b
+  - a lot of polynomials
+  - 1/z
+  - e^z
+  - log z
+  - essential singulatity
+  - continuous but fourier series diverges one
 
 done:
 
+- create gifs to display the complex functions (similar to older project)
 - maybe add domain coloring + black to white images
 - htlatex for compiling latex into html
 - for the rust project, one library file + separate binary for each image

@@ -8,10 +8,11 @@
 // doesn't support for partial application like g. (f 5) $ 6 for g(f(5,6))
 
 macro_rules! hc {
-    ( $f:ident . $($tail:tt)+ ) => {{
-        $f ( hc!($($tail)* ) )
+    ( $f:ident $($h:expr)* , $($tail:tt)* ) => {{
+        $f ( $($h,)* hc!($($tail)* ) )
     }};
     ( $f:ident @ $($x:expr),+ ) => {{
         $f ( $($x),+ )
     }}
 }
+
