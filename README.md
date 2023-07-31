@@ -1,6 +1,6 @@
 see the html document deployed by github on:
 
-https://yahya-tamur.github.io/visualizing-complex-functions-2/doc/a.html
+https://yahya-tamur.github.io/complex-gifs/doc/a.html
 
 in progress. rewrite of older project I had.
 
