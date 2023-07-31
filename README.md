@@ -6,7 +6,6 @@ in progress. rewrite of older project I had.
 
 # Running the Program Locally
 
-<<<<<<< HEAD
 The rust crate on 'complex-gifs' contains the library for making the images as
 well as the code the create each image as examples.
 
@@ -27,15 +26,3 @@ done:
 - maybe add domain coloring + black to white images
 - htlatex for compiling latex into html
 - for the rust project, one library file + separate binary for each image
-=======
-  - create gifs to display the complex functions (similar to older project)
-  - (done?) maybe add domain coloring + black to white images
-  - make gif of sphere with stereographic projection
-  
-that's it?
-    
-  - rayon to parallelize
-  - for the rust project, one library file + separate binary for each image
-  - (done?) htlatex for compiling latex into html
-  - short writeup, like 5 pages max?
->>>>>>> 6bae09d85c647862256bb888966b3ef63096b4e5
