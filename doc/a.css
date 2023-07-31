@@ -1,9 +1,7 @@
- 
+
+/* a.css from a.tex (TeX4ht) */
 /* start css.sty */
-.futr8t-{ font-family: 'Utopia', serif;}
-.futr8t-x-x-172{font-size:172%; font-family: 'Utopia', serif;}
-.futmii-{ font-style: italic; font-family: 'Fourier-Math-Letters', serif;}
-.futsy-{ font-family: 'Fourier-Math-Symbols', serif;}
+.cmtt-10{font-family: monospace,monospace;}
 p{margin-top:0;margin-bottom:0}
 p.indent{text-indent:0;}
 p + p{margin-top:1em;}
@@ -115,6 +113,39 @@ div.author{white-space: nowrap;}
 div.abstract p {margin-left:5%; margin-right:5%;}
 div.abstract {width:100%;}
 .abstracttitle{text-align:center;margin-bottom:1em;}
+figure.float, div.figure {margin-left: auto; margin-right: auto;}
+figure.figure {text-align:center;}
+figcaption.caption {text-indent:-2em; margin-left:3em; margin-right:1em; text-align:center;}
+figcaption.caption span.id{font-weight: bold; white-space: nowrap; }
+p + figcaption, img + figcaption{margin-top: 1em;}
+.abstract{margin:1em;}
 .rotatebox{display: inline-block;}
+.equation td{text-align:center; }
+.equation-star td{text-align:center; }
+table.equation-star { width:100%; }
+table.equation { width:100%; }
+table.align, table.alignat, table.xalignat, table.xxalignat, table.flalign {width:95%; margin-left:5%; white-space: nowrap;}
+table.align-star, table.alignat-star, table.xalignat-star, table.flalign-star {margin-left:auto; margin-right:auto; white-space: nowrap;}
+td.align-label { width:5%; text-align:center; }
+td.align-odd { text-align:right; padding-right:0.3em;}
+td.align-even { text-align:left; padding-right:0.6em;}
+table.multline, table.multline-star {width:100%;}
+td.gather {text-align:center; }
+table.gather {width:100%;}
+div.gather-star {text-align:center;}
 /* end css.sty */
 
+body {
+  font-size: 14pt;
+  width: 70%;
+  margin: auto auto;
+}
+
+figure.figure img.graphics {
+  text-align: center;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+  

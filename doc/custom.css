@@ -1,0 +1,14 @@
+/* css.sty */
+
+body {
+  font-size: 14pt;
+  width: 70%;
+  margin: auto auto;
+}
+
+figure.figure img.graphics {
+  text-align: center;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}

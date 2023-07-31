@@ -1,40 +1,56 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"  
-  "http://www.w3.org/TR/html4/loose.dtd">  
-<html > 
-<head><title>Title</title> 
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"> 
-<meta name="generator" content="TeX4ht (https://tug.org/tex4ht/)"> 
-<meta name="originator" content="TeX4ht (https://tug.org/tex4ht/)"> 
-<!-- html --> 
-<meta name="src" content="a.tex"> 
-<link rel="stylesheet" type="text/css" href="a.css"> 
-</head><body 
->
-   <div class="maketitle">
+<!DOCTYPE html> 
+<html lang='en-US' xml:lang='en-US'> 
+<head><title></title> 
+<meta charset='utf-8' /> 
+<meta content='TeX4ht (https://tug.org/tex4ht/)' name='generator' /> 
+<meta content='width=device-width,initial-scale=1' name='viewport' /> 
+<link href='a.css' rel='stylesheet' type='text/css' /> 
+<meta content='a.tex' name='src' /> 
+<script>window.MathJax = { tex: { tags: "ams", }, }; </script> 
+ <script async='async' id='MathJax-script' src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js' type='text/javascript'></script>  
+</head><body>
+   <h3 class='sectionHead'><span class='titlemark'>1   </span> <a id='x1-10001'></a>Introduction</h3>
+<!-- l. 20 --><p class='noindent'>I’ll refer to functions that take complex numbers and return complex numbers as
+complex functions. These are hard to graph, since they essentially take two
+variables (the real part and the imaginary part of a complex number) and
+return two variables (the real part and the imaginary part of a complex
+number). So, the most straightforward way to graph them would be four
+dimensional.
+</p><!-- l. 27 --><p class='indent'>   We can graph the real part and the imaginary part separately, but these are often
+related in subtle ways, as I’ll show shortly.
+</p><!-- l. 30 --><p class='indent'>   One common way these functions can be defined is called domain coloring. We
+write the complex number in polar form \((re^{i\theta } = r\cos (\theta ) + ir\sin (\theta ))\), and assign a color to every value of \(\theta \). We
+then graph the complex plane, assigning every point \(z\) the color \(f(z)\) represents. The
+following image graphs \(f(z) = z\), and we can see that \(\theta = 0\) is is assigned a color halfway between
+blue and green, \(\theta = \frac {\pi }{3}\) is blue, \(\theta = \pi \) is red.
+</p>
+<div class='center'>
+<!-- l. 38 --><p class='noindent'>
+</p><!-- l. 39 --><p class='noindent'><img alt='PIC' src='../images/example1.gif' /></p></div>
+<!-- l. 42 --><p class='indent'>   The reason it’s a color wheel and not something like a gradient is because the
+colors can be the same value at \(0\) and \(2\pi \), so similar values of \(\theta \) are always similar
+colors.
 
-
-
-<h2 class="titleHead">Title</h2>
-<div class="author" ></div><br />
-<div class="date" ></div>
-   </div>
-   <h3 class="sectionHead"><span class="titlemark">1    </span> <a 
- id="x1-10001"></a></h3>
-<!--l. 16--><p class="noindent" >text... <span 
-class="futmii-">f </span>(<span 
-class="futmii-">x</span><span 
-class="futsy-">+</span><span 
-class="futmii-">iy</span>) <span 
-class="futsy-">=</span><span 
-class="futmii-">x</span><span 
-class="futsy-">+</span><span 
-class="futmii-">iy</span>. <img 
-src="../images/example1.gif" alt="PIC"  
-> <img 
-src="../images/example2.gif" alt="PIC"  
->
+</p><!-- l. 46 --><p class='indent'>   Also, any information about \(r\) is not represented in this image, so sometimes
+contour lines are added. The image below colors a pixel black if \(|f(z)|\) is close to a
+whole number, resulting in contour lines, similar to topographical maps. The
+gradient also goes from red to white from \(-\pi \) to \(\pi \) to illustrate the previous
+point.
+</p>
+<div class='center'>
+<!-- l. 52 --><p class='noindent'>
+</p><!-- l. 53 --><p class='noindent'><img alt='PIC' src='../images/example2.gif' /></p></div>
+<!-- l. 57 --><p class='noindent'>
+</p>
+   <h3 class='sectionHead'><span class='titlemark'>2   </span> <a id='x1-20002'></a>Holomorphic Functions</h3>
+<!-- l. 59 --><p class='noindent'>Complex functions have a notion similar to differentiability in real numbers – a
+complex function is said to be holomorphic if the following limit exists:
+</p><!-- l. 62 --><p class='indent'>   \[f'(z) = \lim _{h \to 0} \frac {f(z+h) - f(z)}{h}\]
+</p><!-- l. 64 --><p class='indent'>   Here, \(h\) is a complex number, and the limit is defined as follows:
+</p><!-- l. 68 --><p class='indent'>   \[\lim _{z \to a}f(z) = L \text { means that for all } \epsilon &gt; 0 \text {, there exists a } \delta \text { such that } |z - a| &lt; \delta \text { implies } |f(z) - L| &lt; \epsilon \]
+</p><!-- l. 70 --><p class='indent'>   And \(|z|\) here is defined as \(|a+bi| = \sqrt {a^2+b^2}\).
+</p><!-- l. 72 --><p class='indent'>   This is exactly the same way something like \(\lim _{(x,y) \to (a,b)} f(x,y)\) would be defined.
+</p>
     
-</body></html> 
-
-
-
+</body> 
+</html>

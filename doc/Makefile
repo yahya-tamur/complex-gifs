@@ -1,8 +1,12 @@
-
 doc: a.tex
-	htlatex a.tex
+	make4ht a.tex "mathjax"
 
-.PHONY: clean
+image:
+	cd ../complex-gifs && for ex in examples/*.rs; do cargo run --example "$$(basename "$${ex%.rs}")"; done;
 
-clean:
-	rm -f a.4ct a.4tc a.aux a.dvi a.idv a.lg a.log a.tmp a.xref
+clean: a.tex
+	make4ht -m clean a.tex -a info "mathjax"
+
+fmt: custom.css
+	prettier -w custom.css
+
