@@ -36,8 +36,8 @@ enum ComplexInfo {
     Contour,
 }
 
-fn index_contour(index_max: usize, ct: &ContourParameters, z: Complex64) -> ComplexInfo {
-    if (z.norm() % ct.contour_spacing) < ct.contour_width {
+fn index_contour(index_max: usize, cp: &ContourParameters, z: Complex64) -> ComplexInfo {
+    if (z.norm() % cp.contour_spacing) < cp.contour_width {
         ComplexInfo::Contour
     } else {
         ComplexInfo::Index(index(index_max, z))
@@ -46,7 +46,7 @@ fn index_contour(index_max: usize, ct: &ContourParameters, z: Complex64) -> Comp
 
 pub fn create_gradient_image(
     im: &ImageParameters,
-    gradient: Vec<[u8; 3]>,
+    gradient: Vec<[u8; 3]>, //gradient must contain <= 256 colors!
     f: fn(Complex64) -> Complex64,
 ) {
     let n = gradient.len();
@@ -79,7 +79,7 @@ pub struct ContourParameters {
 pub fn create_gradient_image_with_contours(
     im: &ImageParameters,
     cp: &ContourParameters,
-    mut gradient: Vec<[u8; 3]>,
+    mut gradient: Vec<[u8; 3]>, //gradient must contain <= 255 colors!
     f: fn(Complex64) -> Complex64,
 ) {
     let n = gradient.len();

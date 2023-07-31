@@ -15,4 +15,3 @@ macro_rules! hc {
         $f ( $($x),+ )
     }}
 }
-
