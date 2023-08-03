@@ -4,7 +4,7 @@ use std::env;
 fn main() {
     let path = env::args()
         .nth(1)
-        .unwrap_or("../images/z_loop.gif".to_string());
+        .unwrap_or("../images/z_contour.gif".to_string());
 
     let f = |z: Complex64| z;
 

@@ -4,7 +4,7 @@ use std::env;
 fn main() {
     let path = env::args()
         .nth(1)
-        .unwrap_or("../images/z_color.gif".to_string());
+        .expect("Please provide the output file in the first command line argument.");
 
     let mut gradient = Vec::<[u8; 3]>::with_capacity(255);
     for i in 0..85 {
