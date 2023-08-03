@@ -8,9 +8,8 @@ image:
 
 # Clean build files. This will also delete the images!
 clean: a.tex
-	make4ht -m clean a.tex -a info "mathjax"
+	cd ../doc; make4ht -m clean ../a.tex -a info "mathjax"
 
 # Format. The only relevant supported file type is css.
 fmt: custom.css
 	prettier -w custom.css
-

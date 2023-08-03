@@ -16,13 +16,18 @@ pub struct ImageParameters {
 fn to_complex(im: &ImageParameters, r: u16, c: u16) -> Complex64 {
     let t = |x: u16| x as f64;
     Complex64::new(
-        (t(c) / t(im.height)) * (im.x_end - im.x_start) + im.x_start,
-        (t(im.width - r) / t(im.width)) * (im.y_end - im.y_start) + im.y_start,
+        (t(c) / t(im.width)) * (im.x_end - im.x_start) + im.x_start,
+        (t(im.height - r) / t(im.height)) * (im.y_end - im.y_start) + im.y_start,
     )
 }
 
 fn index(index_max: usize, z: Complex64) -> usize {
-    let i = ((z.arg() + PI) / (2f64 * PI) * (index_max as f64)) as usize;
+    let i = if z.arg() > 0.0 {
+        z.arg()
+    } else {
+        z.arg() + 2.0 * PI
+    };
+    let i = (i / (2f64 * PI) * (index_max as f64)) as usize;
     if i < index_max {
         i
     } else {
@@ -52,10 +57,10 @@ pub fn create_gradient_image(
     let n = gradient.len();
     let color = |i| i as u8;
 
-    let plane_info: Vec<u8> = (0..im.width)
+    let plane_info: Vec<u8> = (0..im.height)
         .into_par_iter()
         .map(|r| {
-            (0..im.height)
+            (0..im.width)
                 .map(|c| hc![color, index n, f , to_complex @ im, r, c ])
                 .collect::<Vec<u8>>()
         })
@@ -89,10 +94,10 @@ pub fn create_gradient_image_with_contours(
         ComplexInfo::Contour => n as u8,
     };
 
-    let plane_info: Vec<u8> = (0..im.width)
+    let plane_info: Vec<u8> = (0..im.height)
         .into_par_iter()
         .map(|r| {
-            (0..im.height)
+            (0..im.width)
                 .map(|c| hc![color, index_contour n cp, f , to_complex @ im, r, c ])
                 .collect::<Vec<u8>>()
         })
@@ -131,10 +136,10 @@ pub fn create_loop_image(
         }
     }
 
-    let plane_info: Vec<Vec<ComplexInfo>> = (0..im.width)
+    let plane_info: Vec<Vec<ComplexInfo>> = (0..im.height)
         .into_par_iter()
         .map(|r| {
-            (0..im.height)
+            (0..im.width)
                 .map(|c| hc![index_contour lp.frames.into() cp, f , to_complex @ im, r, c ])
                 .collect()
         })
@@ -150,9 +155,9 @@ pub fn create_loop_image(
     let frames: Vec<gif::Frame> = (0..lp.frames)
         .into_par_iter()
         .map(|i| {
-            let v: Vec<u8> = (0..im.width)
+            let v: Vec<u8> = (0..im.height)
                 .flat_map(|r| {
-                    (0..im.height).map(move |c| match get_plane_info(r as usize, c as usize) {
+                    (0..im.width).map(move |c| match get_plane_info(r as usize, c as usize) {
                         ComplexInfo::Contour => 0,
                         ComplexInfo::Index(j)
                             if loop_diff(i.into(), j, lp.frames.into()) < lp.angle_width =>

@@ -9,57 +9,108 @@
 <script>window.MathJax = { tex: { tags: "ams", }, }; </script> 
  <script async='async' id='MathJax-script' src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js' type='text/javascript'></script>  
 </head><body>
-   <h3 class='sectionHead'><span class='titlemark'>1   </span> <a id='x1-10001'></a>Introduction</h3>
-<!-- l. 20 --><p class='noindent'>I’ll refer to functions that take complex numbers and return complex numbers as
+   <h3 class='sectionHead'><span class='titlemark'>1   </span> <a id='x1-10001'></a>About this Document</h3>
+<!-- l. 25 --><p class='noindent'>I initially came up with the idea for this document when I was reading Stein and
+Shakarchi’s Complex Analysis in high school. I don’t have the code I wrote back
+then, but there’s an older version I wrote some time in between on my github. I
+haven’t seen this idea anywhere else, but I wouldn’t be surprised if someone else
+came up with it as well.
+</p><!-- l. 31 --><p class='indent'>   The code for creating the images as well as the html page is on the github repo
+associated with this website,
+</p><!-- l. 34 --><p class='indent'>   <a class='url' href='https://github.com/yahya-tamur/complex-gifs'><span class='cmtt-10'>https://github.com/yahya-tamur/complex-gifs</span></a>
+</p><!-- l. 36 --><p class='indent'>   The code for the images is under the ’complex-gifs’ folder. In there, each image is
+created by a different binary in the ’examples’ folder, using the library in the ’src’
+folder. It should hopefully be very easy to experiment and create your own images
+following the examples.
+</p><!-- l. 41 --><p class='indent'>   In the root directory, the ’doc’ folder contains the compiled document and the
+images, and the ’tex’ folder contains the source code for the document as well as
+scripts to compile the images as well as the document.
+</p><!-- l. 45 --><p class='indent'>   Thanks for reading!
+                                                                  
+
+                                                                  
+</p><!-- l. 47 --><p class='noindent'>
+</p>
+   <h3 class='sectionHead'><span class='titlemark'>2   </span> <a id='x1-20002'></a>Introduction</h3>
+<!-- l. 49 --><p class='noindent'>I’ll refer to functions that take complex numbers and return complex numbers as
 complex functions. These are hard to graph, since they essentially take two
 variables (the real part and the imaginary part of a complex number) and
 return two variables (the real part and the imaginary part of a complex
 number). So, the most straightforward way to graph them would be four
 dimensional.
-</p><!-- l. 27 --><p class='indent'>   We can graph the real part and the imaginary part separately, but these are often
-related in subtle ways, as I’ll show shortly.
-</p><!-- l. 30 --><p class='indent'>   One common way these functions can be defined is called domain coloring. We
-write the complex number in polar form \((re^{i\theta } = r\cos (\theta ) + ir\sin (\theta ))\), and assign a color to every value of \(\theta \). We
-then graph the complex plane, assigning every point \(z\) the color \(f(z)\) represents. The
-following image graphs \(f(z) = z\), and we can see that \(\theta = 0\) is is assigned a color halfway between
-blue and green, \(\theta = \frac {\pi }{3}\) is blue, \(\theta = \pi \) is red.
+</p><!-- l. 56 --><p class='indent'>   We can graph the real part and the imaginary part of the return value separately
+as functions of two variables, but these are often related in subtle ways, as I’ll show
+shortly.
+</p><!-- l. 60 --><p class='indent'>   One common way these functions can be defined is called domain coloring. We
+write complex numbers in polar form \((re^{i\theta } = r\cos (\theta ) + ir\sin (\theta ))\), and assign a color to every value of \(\theta \). We then
+graph the complex plane, assigning every point \((a,b)\) the color \(f(a + bi)\) represents. The following
+image graphs \(f(z) = z\), and we can see that \(\theta = 0\) is is assigned a color halfway between blue and
+green, \(\theta = \frac {\pi }{3}\) is blue, \(\theta = \pi \) is red.
 </p>
 <div class='center'>
-<!-- l. 38 --><p class='noindent'>
-</p><!-- l. 39 --><p class='noindent'><img alt='PIC' src='../doc/images/z_color.gif' /></p></div>
-<!-- l. 42 --><p class='indent'>   The reason it’s a color wheel and not something like a gradient is because the
+<!-- l. 68 --><p class='noindent'>
+</p><!-- l. 69 --><p class='noindent'><img alt='PIC' src='../doc/images/z_color.gif' /></p></div>
+<!-- l. 72 --><p class='indent'>   The reason it’s a color wheel and not something like a gradient is because the
 colors can be the same value at \(0\) and \(2\pi \), so similar values of \(\theta \) are always similar
 colors.
-</p><!-- l. 46 --><p class='indent'>   Also, any information about \(r\) is not represented in this image, so sometimes
+</p><!-- l. 76 --><p class='indent'>   Also, any information about \(r\) is not represented in this image, so sometimes
 contour lines are added. The image below colors a pixel black if \(|f(z)|\) is close to a
 whole number, resulting in contour lines, similar to topographical maps. The
 gradient also goes from red to white from \(-\pi \) to \(\pi \) to illustrate the previous
 point.
 </p>
 <div class='center'>
-<!-- l. 52 --><p class='noindent'>
-</p><!-- l. 53 --><p class='noindent'><img alt='PIC' src='../doc/images/z_contour.gif' /></p></div>
-<!-- l. 56 --><p class='indent'>   The novelty of this document is that instead of color, we represent each value of \(\theta \)
-as a point in time in a moving image. In the image below, \(\theta \approx 0\) is highlighted at first, and \(\theta \approx \pi \)
+<!-- l. 82 --><p class='noindent'>
+</p><!-- l. 83 --><p class='noindent'><img alt='PIC' src='../doc/images/z_contour.gif' /></p></div>
+<!-- l. 86 --><p class='indent'>   The novelty of this document is that instead of color, we represent each value of \(\theta \)
+as a point in time in a moving image. In the image below, \(\theta \approx 0\) is highlighted at first,
+and \(\theta \approx \pi \) is highlighted halfway through. Similarly to the first approach, similar
+values of \(\theta \) are treated similarly, since the difference between the last and
+the first frames is equivalent to the difference between the first and second
+frames.
+                                                                  
 
-is highlighted halfway through. Similarly to the first approach, similar values of
-\(\theta \) are treated similarly, since the difference between the last and the first
-frames is equivalent to the difference between the first and second frames.
+                                                                  
 </p>
 <div class='center'>
-<!-- l. 62 --><p class='noindent'>
-</p><!-- l. 63 --><p class='noindent'><img alt='PIC' src='../doc/images/z_loop.gif' /></p></div>
-<!-- l. 66 --><p class='noindent'>
+<!-- l. 94 --><p class='noindent'>
+</p><!-- l. 95 --><p class='noindent'><img alt='PIC' src='../doc/images/z_loop.gif' /></p></div>
+<!-- l. 98 --><p class='noindent'>
 </p>
-   <h3 class='sectionHead'><span class='titlemark'>2   </span> <a id='x1-20002'></a>Holomorphic Functions</h3>
-<!-- l. 68 --><p class='noindent'>Complex functions have a notion similar to differentiability in real numbers – a
+   <h3 class='sectionHead'><span class='titlemark'>3   </span> <a id='x1-30003'></a>Holomorphic Functions</h3>
+<!-- l. 100 --><p class='noindent'>Complex functions have a notion similar to differentiability in real numbers – a
 complex function is said to be holomorphic if the following limit exists:
-</p><!-- l. 71 --><p class='indent'>   \[f'(z) = \lim _{h \to 0} \frac {f(z+h) - f(z)}{h}\]
-</p><!-- l. 73 --><p class='indent'>   Here, \(h\) is a complex number, and the limit is defined as follows:
-</p><!-- l. 77 --><p class='indent'>   \[\lim _{z \to a}f(z) = L \text { means that for all } \epsilon &gt; 0 \text {, there exists a } \delta \text { such that } |z - a| &lt; \delta \text { implies } |f(z) - L| &lt; \epsilon \]
-</p><!-- l. 79 --><p class='indent'>   And \(|z|\) here is defined as \(|a+bi| = \sqrt {a^2+b^2}\).
-</p><!-- l. 81 --><p class='indent'>   This is exactly the same way something like \(\lim _{(x,y) \to (a,b)} f(x,y)\) would be defined.
+</p><!-- l. 104 --><p class='indent'>   \[f'(z) = \lim _{h \to 0} \frac {f(z+h) - f(z)}{h}\]
+</p><!-- l. 106 --><p class='indent'>   Here, \(h\) is a complex number, and the limit is defined as follows:
+</p><!-- l. 110 --><p class='indent'>   \[\lim _{z \to a}f(z) = L \text { means that for all } \epsilon &gt; 0 \text {, there exists a } \delta \text { such that } |z - a| &lt; \delta \text { implies } |f(z) - L| &lt; \epsilon \]
+</p><!-- l. 112 --><p class='indent'>   And the modulus \(|z|\) here is defined as \(|a+bi| = \sqrt {a^2+b^2}\).
+</p><!-- l. 114 --><p class='indent'>   This is exactly the same way something like \(\lim _{(x,y) \to (a,b)} f(x,y)\) would be defined.
+</p><!-- l. 117 --><p class='indent'>   Similarly to the real case, having a derivative means that \(f(z)\) is approximately \(az + b\) for
+some \(a, b\) at any point.
+</p><!-- l. 120 --><p class='indent'>   In a more convenient form, it’s approximately \(a(z-b)\). \(z-b\) is exactly the function we’ve seen
+before except the origin moved to \(b\), and since \(r_1e^{i\theta _1} \times r_2e^{i\theta _2} = (r_1 r_2) e^{i(\theta _1 + \theta _2)}\), multiplying by \(a\) has the effect of the
+rotation starting at a different angle, and the contour lines having a different
+spacing:
 </p>
+   <figure class='figure'> 
+
+                                                                  
+
+                                                                  
+                                                                  
+
+                                                                  
+<div class='subfigure'>
+<!-- l. 128 --><p class='noindent'></p><!-- l. 130 --><p class='noindent'><img alt='PIC' src='../doc/images/linear_1.gif' />
+</p><!-- l. 131 --><p class='noindent'>\(f(z)=5i(z-2)\)
+</p></div> <div class='subfigure'>
+<!-- l. 133 --><p class='noindent'></p><!-- l. 135 --><p class='noindent'><img alt='PIC' src='../doc/images/linear_2.gif' />
+</p><!-- l. 136 --><p class='noindent'>\(f(z)=0.5(z-(3+2i))\)
+</p></div>
+                                                                  
+
+                                                                  
+   </figure>
     
 </body> 
 </html>
