@@ -18,77 +18,89 @@ came up with it as well.
 </p><!-- l. 31 --><p class='indent'>   The code for creating the images as well as the html page is on the github repo
 associated with this website,
 </p><!-- l. 34 --><p class='indent'>   <a class='url' href='https://github.com/yahya-tamur/complex-gifs'><span class='cmtt-10'>https://github.com/yahya-tamur/complex-gifs</span></a>
-</p><!-- l. 36 --><p class='indent'>   The code for the images is under the ’complex-gifs’ folder. In there, each image is
-created by a different binary in the ’examples’ folder, using the library in the ’src’
-folder. It should hopefully be very easy to experiment and create your own images
-following the examples.
-</p><!-- l. 41 --><p class='indent'>   In the root directory, the ’doc’ folder contains the compiled document and the
-images, and the ’tex’ folder contains the source code for the document as well as
-scripts to compile the images as well as the document.
-</p><!-- l. 45 --><p class='indent'>   Thanks for reading!
-                                                                  
-
-                                                                  
-</p><!-- l. 47 --><p class='noindent'>
+</p><!-- l. 36 --><p class='indent'>   It should be easy to experiment and create your own images.
+</p><!-- l. 38 --><p class='indent'>   Thanks for reading!
+</p><!-- l. 40 --><p class='noindent'>
 </p>
    <h3 class='sectionHead'><span class='titlemark'>2   </span> <a id='x1-20002'></a>Introduction</h3>
-<!-- l. 49 --><p class='noindent'>I’ll refer to functions that take complex numbers and return complex numbers as
+<!-- l. 42 --><p class='noindent'>I’ll refer to functions that take complex numbers and return complex numbers as
 complex functions. These are hard to graph, since they essentially take two
 variables (the real part and the imaginary part of a complex number) and
 return two variables (the real part and the imaginary part of a complex
+                                                                  
+
+                                                                  
 number). So, the most straightforward way to graph them would be four
 dimensional.
-</p><!-- l. 56 --><p class='indent'>   We can graph the real part and the imaginary part of the return value separately
-as functions of two variables, but these are often related in subtle ways, as I’ll show
-shortly.
-</p><!-- l. 60 --><p class='indent'>   One common way these functions can be defined is called domain coloring. We
+</p><!-- l. 49 --><p class='indent'>   We can graph the real part and the imaginary part of the return value
+separately as functions of two variables, but these are often related in subtle
+ways.
+</p><!-- l. 53 --><p class='indent'>   One common way these functions can be defined is called domain coloring. We
 write complex numbers in polar form \((re^{i\theta } = r\cos (\theta ) + ir\sin (\theta ))\), and assign a color to every value of \(\theta \). We then
 graph the complex plane, assigning every point \((a,b)\) the color \(f(a + bi)\) represents. The following
-image graphs \(f(z) = z\), and we can see that \(\theta = 0\) is is assigned a color halfway between blue and
-green, \(\theta = \frac {\pi }{3}\) is blue, \(\theta = \pi \) is red.
+image graphs \(f(z) = z\), and we can see that \(\theta = 0\) is assigned red, \(\theta = \frac {2\pi }{3}\) is green, \(\theta = \pi \) is somewhere between
+blue and green.
 </p>
 <div class='center'>
-<!-- l. 68 --><p class='noindent'>
-</p><!-- l. 69 --><p class='noindent'><img alt='PIC' src='../doc/images/z_color.gif' /></p></div>
-<!-- l. 72 --><p class='indent'>   The reason it’s a color wheel and not something like a gradient is because the
+<!-- l. 62 --><p class='noindent'>
+</p><!-- l. 63 --><p class='noindent'><img alt='PIC' src='../doc/images/z_color.gif' /></p></div>
+<!-- l. 66 --><p class='indent'>   The reason it’s a color wheel and not something like a gradient is because the
 colors can be the same value at \(0\) and \(2\pi \), so similar values of \(\theta \) are always similar
 colors.
-</p><!-- l. 76 --><p class='indent'>   Also, any information about \(r\) is not represented in this image, so sometimes
-contour lines are added. The image below colors a pixel black if \(|f(z)|\) is close to a
+</p><!-- l. 70 --><p class='indent'>   Also, no information about the \(r\) in \(re^{i\theta }\) is represented in this image, so sometimes
+contour lines are added. The image below colors a pixel black if \(r\) is close to a
 whole number, resulting in contour lines, similar to topographical maps. The
-gradient also goes from red to white from \(-\pi \) to \(\pi \) to illustrate the previous
+gradient also goes from red to white from \(0\) to \(2\pi \) to illustrate the previous
 point.
 </p>
 <div class='center'>
-<!-- l. 82 --><p class='noindent'>
-</p><!-- l. 83 --><p class='noindent'><img alt='PIC' src='../doc/images/z_contour.gif' /></p></div>
-<!-- l. 86 --><p class='indent'>   The novelty of this document is that instead of color, we represent each value of \(\theta \)
+<!-- l. 76 --><p class='noindent'>
+</p><!-- l. 77 --><p class='noindent'><img alt='PIC' src='../doc/images/z_contour.gif' /></p></div>
+<!-- l. 80 --><p class='indent'>   The novelty of this document is that instead of color, we represent each value of \(\theta \)
 as a point in time in a moving image. In the image below, \(\theta \approx 0\) is highlighted at first,
 and \(\theta \approx \pi \) is highlighted halfway through. Similarly to the first approach, similar
 values of \(\theta \) are treated similarly, since the difference between the last and
 the first frames is equivalent to the difference between the first and second
 frames.
+</p>
+<div class='center'>
+<!-- l. 88 --><p class='noindent'>
+</p><!-- l. 89 --><p class='noindent'><img alt='PIC' src='../doc/images/z_loop.gif' /></p></div>
+                                                                  
+
+                                                                  
+<!-- l. 92 --><p class='indent'>   It can be hard to tell which direction \(|f(z)|\) increases by looking only at the
+contour lines. In the image below, the contour lines move from lower to higher
+values.
+</p>
+<div class='center'>
+<!-- l. 97 --><p class='noindent'>
+</p><!-- l. 98 --><p class='noindent'><img alt='PIC' src='../doc/images/z_contour_loop.gif' /></p></div>
+<!-- l. 101 --><p class='indent'>   While graphing \(\frac {1}{z}\), notice that\(\frac {1}{re^{\theta i}} = \frac {1}{r}e^{-\theta i}\), so in addition to the contour lines moving in instead
+of out, the selected pixels moves clockwise instead of counterclockwise:
+</p>
+   <figure class='figure'> 
+
+                                                                  
+
+                                                                  
+                                                                  
+
+                                                                  
+<!-- l. 108 --><p class='noindent'><img alt='PIC' src='../doc/images/inv.gif' />
+</p><!-- l. 109 --><p class='noindent'>\(f(z) = \frac {1}{z}\)
                                                                   
 
                                                                   
 </p>
-<div class='center'>
-<!-- l. 94 --><p class='noindent'>
-</p><!-- l. 95 --><p class='noindent'><img alt='PIC' src='../doc/images/z_loop.gif' /></p></div>
-<!-- l. 98 --><p class='noindent'>
+   </figure>
+<!-- l. 112 --><p class='indent'>   This process does create very interesting looking Moire patterns.
 </p>
    <h3 class='sectionHead'><span class='titlemark'>3   </span> <a id='x1-30003'></a>Holomorphic Functions</h3>
-<!-- l. 100 --><p class='noindent'>Complex functions have a notion similar to differentiability in real numbers – a
-complex function is said to be holomorphic if the following limit exists:
-</p><!-- l. 104 --><p class='indent'>   \[f'(z) = \lim _{h \to 0} \frac {f(z+h) - f(z)}{h}\]
-</p><!-- l. 106 --><p class='indent'>   Here, \(h\) is a complex number, and the limit is defined as follows:
-</p><!-- l. 110 --><p class='indent'>   \[\lim _{z \to a}f(z) = L \text { means that for all } \epsilon &gt; 0 \text {, there exists a } \delta \text { such that } |z - a| &lt; \delta \text { implies } |f(z) - L| &lt; \epsilon \]
-</p><!-- l. 112 --><p class='indent'>   And the modulus \(|z|\) here is defined as \(|a+bi| = \sqrt {a^2+b^2}\).
-</p><!-- l. 114 --><p class='indent'>   This is exactly the same way something like \(\lim _{(x,y) \to (a,b)} f(x,y)\) would be defined.
-</p><!-- l. 117 --><p class='indent'>   Similarly to the real case, having a derivative means that \(f(z)\) is approximately \(az + b\) for
-some \(a, b\) at any point.
-</p><!-- l. 120 --><p class='indent'>   In a more convenient form, it’s approximately \(a(z-b)\). \(z-b\) is exactly the function we’ve seen
-before except the origin moved to \(b\), and since \(r_1e^{i\theta _1} \times r_2e^{i\theta _2} = (r_1 r_2) e^{i(\theta _1 + \theta _2)}\), multiplying by \(a\) has the effect of the
+<!-- l. 117 --><p class='noindent'>I might write some actual introduction to holomorphic functions here later, but for
+now, I just decided to put in the images with a few comments.
+</p><!-- l. 120 --><p class='indent'>   Consider the linear function \(a(z-b)\). \(z-b\) is exactly the function we’ve seen before
+except the origin moved to \(b\), and since \(r_1e^{i\theta _1} \times r_2e^{i\theta _2} = (r_1 r_2) e^{i(\theta _1 + \theta _2)}\), multiplying by \(a\) has the effect of the
 rotation starting at a different angle, and the contour lines having a different
 spacing:
 </p>
@@ -110,6 +122,145 @@ spacing:
                                                                   
 
                                                                   
+   </figure>
+<!-- l. 140 --><p class='indent'>   Since two unique values of \(\theta \), on opposite sides of the unit circle, solve \(z^2 = C\), here’s what
+\(f(z) = z^2\) looks like:
+</p>
+   <figure class='figure'> 
+
+                                                                  
+
+                                                                  
+                                                                  
+
+                                                                  
+<!-- l. 145 --><p class='noindent'><img alt='PIC' src='../doc/images/poly_1.gif' />
+</p><!-- l. 146 --><p class='noindent'>\(f(z) = z^2\)
+                                                                  
+
+                                                                  
+</p>
+   </figure>
+<!-- l. 149 --><p class='indent'>   And here’s what it looks like there are two roots next to each other instead of a
+single double root:
+</p>
+   <figure class='figure'> 
+
+                                                                  
+
+                                                                  
+                                                                  
+
+                                                                  
+<!-- l. 154 --><p class='noindent'><img alt='PIC' src='../doc/images/poly_2.gif' />
+</p><!-- l. 155 --><p class='noindent'>\(f(z) = z^2 + 1\)
+                                                                  
+
+                                                                  
+</p>
+   </figure>
+<!-- l. 158 --><p class='indent'>   And here’s a seven-root:
+</p>
+   <figure class='figure'> 
+
+                                                                  
+
+                                                                  
+                                                                  
+
+                                                                  
+<!-- l. 162 --><p class='noindent'><img alt='PIC' src='../doc/images/poly_3.gif' />
+</p><!-- l. 163 --><p class='noindent'>\(f(z) = z^7\)
+                                                                  
+
+                                                                  
+</p>
+   </figure>
+<!-- l. 167 --><p class='indent'>   Every holomorphic function is equal to a power series, however this doesn’t mean
+they always look like a countable set of roots. Below, we have increasing partial sums
+for \(e^z = \sum _{n=1}^\infty \frac {z^n}{n!}\), graphed on the same scale.
+</p>
+   <figure class='figure'> 
+
+                                                                  
+
+                                                                  
+                                                                  
+
+                                                                  
+<!-- l. 174 --><p class='noindent'><img alt='PIC' src='../doc/images/exp_sum_to_5.gif' />
+</p><!-- l. 175 --><p class='noindent'>\(f(z) = \sum _{n=0}^4 \frac {z^n}{n!}\)
+                                                                  
+
+                                                                  
+</p>
+   </figure>
+   <figure class='figure'> 
+
+                                                                  
+
+                                                                  
+                                                                  
+
+                                                                  
+<!-- l. 180 --><p class='noindent'><img alt='PIC' src='../doc/images/exp_sum_to_10.gif' />
+</p><!-- l. 181 --><p class='noindent'>\(f(z) = \sum _{n=0}^9x \frac {z^n}{n!}\)
+                                                                  
+
+                                                                  
+</p>
+   </figure>
+   <figure class='figure'> 
+
+                                                                  
+
+                                                                  
+                                                                  
+
+                                                                  
+<!-- l. 186 --><p class='noindent'><img alt='PIC' src='../doc/images/exp_sum_to_20.gif' />
+</p><!-- l. 187 --><p class='noindent'>\(f(z) = \sum _{n=0}^{19} \frac {z^n}{n!}\)
+                                                                  
+
+                                                                  
+</p>
+   </figure>
+   <figure class='figure'> 
+
+                                                                  
+
+                                                                  
+                                                                  
+
+                                                                  
+<!-- l. 192 --><p class='noindent'><img alt='PIC' src='../doc/images/exp.gif' />
+</p><!-- l. 193 --><p class='noindent'>\(f(z) = e^z = \sum _{n=0}^\infty \frac {z^n}{n!}\)
+                                                                  
+
+                                                                  
+</p>
+   </figure>
+<!-- l. 196 --><p class='indent'>   And if you think about it, the power series doesn’t converge uniformly, so every
+partial sum will be closer to the limit in the center and pretty far from it towards the
+outside.
+</p><!-- l. 200 --><p class='indent'>   Here’s the inverse stereographic projection of the complex plane, onto a sphere.
+Notice that the function \(f(z) = z\) looks like \(f(z) = \frac {1}{z}\) on the opposite pole, which represents a point at
+infinity.
+</p>
+   <figure class='figure'> 
+
+                                                                  
+
+                                                                  
+                                                                  
+
+                                                                  
+<!-- l. 206 --><p class='noindent'><img alt='PIC' src='../doc/images/z_sphere.gif' />
+</p><!-- l. 207 --><p class='noindent'>\(f(z) = z\)
+                                                                  
+
+                                                                  
+</p>
    </figure>
     
 </body> 

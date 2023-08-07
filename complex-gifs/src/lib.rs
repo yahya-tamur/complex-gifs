@@ -1,5 +1,8 @@
 #[macro_use]
 mod macros;
 
-mod gifs;
-pub use gifs::*;
+//pub use num_complex::Complex64;
+
+pub mod gifs;
+
+pub mod math;

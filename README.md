@@ -6,30 +6,27 @@ in progress. rewrite of older project I had.
 
 ## Running the Program Locally
 
-The rust crate on 'complex-gifs' contains the library for making the images as
-well as the code the create each image as examples.
+The rust crate on `complex-gifs` contains the library for making the images
+under the `src` directory, and the code for generating the images in the
+document under the `examples` directory.
 
-From the 'doc' folder, 'make doc' compiles the tex into html (may require various packages).
-'make image' runs every example of the cargo crate to make the necessary images.
-'make clean' deletes the build files, which unfortunately includes the images created
-by 'make image'.
+The `tex` folder contains the files that compile into the html document, as
+well as scripts to generate all the images and compile the document.
+
+The `doc` folder contains the compiled document as well as the generated
+images.
 
 ## Goals
 
-- make gif of sphere with stereographic projection
-- rayon to parallelize?
-- short writeup, like 5 pages max:
-  - az + b
-  - a lot of polynomials
-  - 1/z
-  - e^z
-  - log z
-  - essential singulatity
-  - continuous but fourier series diverges one
+- graph more things, especially with the sphere, fourier series, e^e^e^z, ...
+- Go over the document. How much do you expect a reader to know?
+- figure out the fonts
 
-done:
+Done:
 
 - create gifs to display the complex functions (similar to older project)
 - maybe add domain coloring + black to white images
 - htlatex for compiling latex into html
 - for the rust project, one library file + separate binary for each image
+- make gif of sphere with stereographic projection
+- rayon to parallelize?

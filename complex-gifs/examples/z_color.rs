@@ -1,10 +1,12 @@
-use complex_gifs::*;
+use complex_gifs::gifs::*;
+use num_complex::Complex64;
 use std::env;
 
 fn main() {
     let path = env::args()
         .nth(1)
-        .expect("Please provide the output file in the first command line argument.");
+        .expect("Please provide the output directory in the first command line argument.")
+        + "/z_color.gif";
 
     let mut gradient = Vec::<[u8; 3]>::with_capacity(255);
     for i in 0..85 {
@@ -21,10 +23,10 @@ fn main() {
     create_gradient_image(
         &ImageParameters {
             path,
-            x_start: -1f64,
-            x_end: 1f64,
-            y_start: -1f64,
-            y_end: 1f64,
+            x_start: -1.0,
+            x_end: 1.0,
+            y_start: -1.0,
+            y_end: 1.0,
             width: 500,
             height: 500,
         },

@@ -3,8 +3,8 @@
 %\usepackage{fourier}
 \usepackage{graphicx}
 \usepackage{amsmath}
-\usepackage{subcaption}
 \usepackage{hyperref}
+\usepackage{subcaption}
 \graphicspath{{../doc/images}}
 
 %\renewcommand{\thesubsection}{\thesection.\alph{subsection}}
@@ -33,14 +33,7 @@
 
     \url{https://github.com/yahya-tamur/complex-gifs}
 
-    The code for the images is under the 'complex-gifs' folder. In there, each
-    image is created by a different binary in the 'examples' folder, using the
-    library in the 'src' folder. It should hopefully be very easy to experiment
-    and create your own images following the examples.
-
-    In the root directory, the 'doc' folder contains the compiled document and
-    the images, and the 'tex' folder contains the source code for the document
-    as well as scripts to compile the images as well as the document.
+    It should be easy to experiment and create your own images.
 
     Thanks for reading!
 
@@ -55,15 +48,16 @@
 
     We can graph the real part and the imaginary part of the return value
     separately as functions of two variables, but these are often related in
-    subtle ways, as I'll show shortly.
+    subtle ways.
 
     One common way these functions can be defined is called domain coloring. We
     write complex numbers in polar form $(re^{i\theta} = r\cos(\theta) +
     ir\sin(\theta))$, and assign a color to every value of $\theta$. We then
     graph the complex plane, assigning every point $(a,b)$ the color $f(a + bi)$
     represents. The following image graphs $f(z) = z$, and we can see that
-    $\theta = 0$ is is assigned a color halfway between blue and green, $\theta
-    = \frac{\pi}{3}$ is blue, $\theta = \pi$ is red.
+    $\theta = 0$ is assigned red, $\theta
+    = \frac{2\pi}{3}$ is green, $\theta = \pi$ is somewhere between blue and
+    green.
 
     \begin{center}
       \includegraphics{z_color.gif}
@@ -73,11 +67,11 @@
     the colors can be the same value at $0$ and $2\pi$, so similar values of
     $\theta$ are always similar colors.
 
-    Also, any information about $r$ is not represented in this image, so
-    sometimes contour lines are added. The image below colors a pixel black if
-    $|f(z)|$ is close to a whole number, resulting in contour lines, similar to
-    topographical maps. The gradient also goes from red to white from $-\pi$ to
-    $\pi$ to illustrate the previous point.
+    Also, no information about the $r$ in $re^{i\theta}$ is represented in this
+    image, so sometimes contour lines are added. The image below colors a pixel
+    black if $r$ is close to a whole number, resulting in contour lines,
+    similar to topographical maps. The gradient also goes from red to white from
+    $0$ to $2\pi$ to illustrate the previous point.
 
     \begin{center}
       \includegraphics{z_contour.gif}
@@ -95,29 +89,35 @@
       \includegraphics{z_loop.gif}
     \end{center}
 
+    It can be hard to tell which direction $|f(z)|$ increases by looking only at
+    the contour lines. In the image below, the contour lines move from lower to
+    higher values.
+
+
+    \begin{center}
+      \includegraphics{z_contour_loop.gif}
+    \end{center}
+
+    While graphing $\frac{1}{z}$, notice that$\frac{1}{re^{\theta i}} =
+    \frac{1}{r}e^{-\theta i}$, so in addition to the contour lines moving in
+    instead of out, the selected pixels moves clockwise instead of
+    counterclockwise:
+
+    \begin{figure}
+      \centering
+      \includegraphics{inv.gif}\par
+      $f(z) = \frac{1}{z}$
+    \end{figure}
+
+    This process does create very interesting looking Moire patterns.
+
+
   \section{Holomorphic Functions}
 
-    Complex functions have a notion similar to differentiability in real numbers
-    -- a complex function is said to be holomorphic if the following limit
-    exists:
+    I might write some actual introduction to holomorphic functions here later,
+    but for now, I just decided to put in the images with a few comments.
 
-    \[f'(z) = \lim_{h \to 0} \frac{f(z+h) - f(z)}{h}\]
-
-    Here, $h$ is a complex number, and the limit is defined as follows:
-
-    \[\lim_{z \to a}f(z) = L \text{ means that for all } \epsilon > 0 \text{,
-    there exists a } \delta \text{ such that } |z - a| < \delta \text{ implies }
-    |f(z) - L| < \epsilon\]
-
-    And the modulus $|z|$ here is defined as $|a+bi| = \sqrt{a^2+b^2}$.
-
-    This is exactly the same way something like $\lim_{(x,y) \to (a,b)} f(x,y)$
-    would be defined.
-
-    Similarly to the real case, having a derivative means that $f(z)$ is
-    approximately $az + b$ for some $a, b$ at any point.
-
-    In a more convenient form, it's approximately $a(z-b)$. $z-b$ is exactly the
+    Consider the linear function $a(z-b)$. $z-b$ is exactly the
     function we've seen before except the origin moved to $b$, and since
     $r_1e^{i\theta_1} \times r_2e^{i\theta_2} = (r_1 r_2) e^{i(\theta_1 +
     \theta_2)}$, multiplying by $a$ has the effect of the rotation starting at a
@@ -125,7 +125,7 @@
 
     \begin{figure}
       \centering
-      \begin{subfigure}{0.5\textwidth}
+      \begin{subfigure}{0.5\linewidth}
         \centering
         \includegraphics{linear_1.gif}\par
         $f(z)=5i(z-2)$
@@ -135,6 +135,76 @@
         \includegraphics{linear_2.gif}\par
         $f(z)=0.5(z-(3+2i))$
       \end{subfigure}
+    \end{figure}
+
+    Since two unique values of $\theta$, on opposite sides of the unit circle,
+    solve $z^2 = C$, here's what $f(z) = z^2$ looks like:
+
+    \begin{figure}
+      \centering
+      \includegraphics{poly_1.gif}\par
+      $f(z) = z^2$
+    \end{figure}
+
+    And here's what it looks like there are two roots next to each other instead
+    of a single double root:
+
+    \begin{figure}
+      \centering
+      \includegraphics{poly_2.gif}\par
+      $f(z) = z^2 + 1$
+    \end{figure}
+
+    And here's a seven-root:
+
+    \begin{figure}
+      \centering
+      \includegraphics{poly_3.gif}\par
+      $f(z) = z^7$
+    \end{figure}
+
+
+    Every holomorphic function is equal to a power series, however this doesn't
+    mean they always look like a countable set of roots. Below, we have
+    increasing partial sums for $e^z = \sum_{n=1}^\infty \frac{z^n}{n!}$,
+    graphed on the same scale.
+
+    \begin{figure}
+      \centering
+      \includegraphics{exp_sum_to_5.gif}\par
+      $f(z) = \sum_{n=0}^4 \frac{z^n}{n!}$
+    \end{figure}
+
+    \begin{figure}
+      \centering
+      \includegraphics{exp_sum_to_10.gif}\par
+      $f(z) = \sum_{n=0}^9x \frac{z^n}{n!}$
+    \end{figure}
+
+    \begin{figure}
+      \centering
+      \includegraphics{exp_sum_to_20.gif}\par
+      $f(z) = \sum_{n=0}^{19} \frac{z^n}{n!}$
+    \end{figure}
+
+    \begin{figure}
+      \centering
+      \includegraphics{exp.gif}\par
+      $f(z) = e^z = \sum_{n=0}^\infty \frac{z^n}{n!}$
+    \end{figure}
+
+  And if you think about it, the power series doesn't converge uniformly, so
+  every partial sum will be closer to the limit in the center and pretty far
+  from it towards the outside.
+
+  Here's the inverse stereographic projection of the complex plane,
+  onto a sphere. Notice that the function $f(z) = z$ looks like $f(z) =
+  \frac{1}{z}$ on the opposite pole, which represents a point at infinity.
+
+    \begin{figure}
+      \centering
+      \includegraphics{z_sphere.gif}\par
+      $f(z) = z$
     \end{figure}
 
   \end{document}

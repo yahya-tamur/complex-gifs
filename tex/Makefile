@@ -4,7 +4,7 @@ doc: a.tex
 
 # Create the images
 image:
-	cd ../complex-gifs && for ex in examples/*.rs; do cargo run -r --example "$$(basename "$${ex%.rs}")" -- "../doc/images/$$(basename "$${ex%.rs}")".gif; done;
+	cd ../complex-gifs && for ex in examples/*.rs; do cargo run -r --example "$$(basename "$${ex%.rs}")" -- "../doc/images/"; done;
 
 # Clean build files. This will also delete the images!
 clean: a.tex

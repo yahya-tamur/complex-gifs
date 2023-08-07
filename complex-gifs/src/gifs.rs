@@ -1,7 +1,8 @@
 use gif::Encoder;
-pub use num_complex::Complex64;
+use num_complex::Complex64;
 use rayon::prelude::*;
 use std::f64::consts::PI;
+use std::marker::Sync;
 
 pub struct ImageParameters {
     pub path: String,
@@ -13,6 +14,31 @@ pub struct ImageParameters {
     pub height: u16,
 }
 
+pub struct ContourParameters {
+    pub contour_spacing: f64,
+    pub contour_width: f64,
+    pub contour_color: [u8; 3],
+}
+
+pub struct LoopContourParameters {
+    pub contour_spacing: f64,
+    pub contour_width: usize,
+    pub contour_color: [u8; 3],
+}
+
+pub struct LoopParameters {
+    pub argument_color: [u8; 3],
+    pub background_color: [u8; 3],
+    pub angle_width: usize, // angle_width / frames of the range is highlighted
+    pub frames: usize,
+}
+
+pub struct SphereParameters {
+    pub theta: f64,
+    pub phi: f64,
+    pub sphere_color: [u8; 3],
+}
+
 fn to_complex(im: &ImageParameters, r: u16, c: u16) -> Complex64 {
     let t = |x: u16| x as f64;
     Complex64::new(
@@ -21,47 +47,59 @@ fn to_complex(im: &ImageParameters, r: u16, c: u16) -> Complex64 {
     )
 }
 
-fn index(index_max: usize, z: Complex64) -> usize {
-    let i = if z.arg() > 0.0 {
-        z.arg()
-    } else {
-        z.arg() + 2.0 * PI
-    };
-    let i = (i / (2f64 * PI) * (index_max as f64)) as usize;
-    if i < index_max {
-        i
+fn arg_index(index_max: usize, z: Complex64) -> usize {
+    let arg = z.arg();
+    let arg = if arg > 0.0 { arg } else { arg + 2.0 * PI };
+
+    let arg_index = (arg / (2.0 * PI) * (index_max as f64)) as usize;
+
+    if arg_index < index_max {
+        arg_index
     } else {
         0
     }
 }
 
-#[derive(Debug, Clone, Copy)]
-enum ComplexInfo {
-    Index(usize),
-    Contour,
+fn static_contour(cp: &ContourParameters, width: f64, z: Complex64) -> bool {
+    let rem = z.norm() % cp.contour_spacing;
+
+    rem < width
 }
 
-fn index_contour(index_max: usize, cp: &ContourParameters, z: Complex64) -> ComplexInfo {
-    if (z.norm() % cp.contour_spacing) < cp.contour_width {
-        ComplexInfo::Contour
+fn contour_index(lcp: &LoopContourParameters, frames: usize, z: Complex64) -> usize {
+    let rem = z.norm() % lcp.contour_spacing;
+
+    let rem_index = (rem / lcp.contour_spacing * (frames as f64)) as usize;
+
+    if rem_index < frames {
+        rem_index
     } else {
-        ComplexInfo::Index(index(index_max, z))
+        0
+    }
+}
+
+//is i in the next d indices of j modulo n?
+fn mod_range(i: usize, j: usize, n: usize, d: usize) -> bool {
+    if i >= j {
+        i - j < d
+    } else {
+        i + n - j < d
     }
 }
 
 pub fn create_gradient_image(
     im: &ImageParameters,
     gradient: Vec<[u8; 3]>, //gradient must contain <= 256 colors!
-    f: fn(Complex64) -> Complex64,
+    f: impl Fn(Complex64) -> Complex64 + Sync,
 ) {
     let n = gradient.len();
     let color = |i| i as u8;
 
-    let plane_info: Vec<u8> = (0..im.height)
+    let pixels: Vec<u8> = (0..im.height)
         .into_par_iter()
         .map(|r| {
             (0..im.width)
-                .map(|c| hc![color, index n, f , to_complex @ im, r, c ])
+                .map(|c| hc![color, arg_index n, f , to_complex @ im, r, c ])
                 .collect::<Vec<u8>>()
         })
         .flatten()
@@ -70,35 +108,32 @@ pub fn create_gradient_image(
     let gradient = gradient.into_iter().flatten().collect::<Vec<u8>>();
     let mut image = std::fs::File::create(&im.path).unwrap();
     let mut encoder = Encoder::new(&mut image, im.width, im.height, &[]).unwrap();
-    encoder.set_repeat(gif::Repeat::Infinite).unwrap();
-    let frame = gif::Frame::from_palette_pixels(im.width, im.height, &plane_info, &gradient, None);
+    //encoder.set_repeat(gif::Repeat::Infinite).unwrap();
+    let frame = gif::Frame::from_palette_pixels(im.width, im.height, &pixels, &gradient, None);
     encoder.write_frame(&frame).unwrap();
 }
 
-pub struct ContourParameters {
-    pub contour_spacing: f64,
-    pub contour_width: f64,
-    pub contour_color: [u8; 3],
-}
-
-pub fn create_gradient_image_with_contours(
+pub fn create_contour_gradient_image(
     im: &ImageParameters,
     cp: &ContourParameters,
     mut gradient: Vec<[u8; 3]>, //gradient must contain <= 255 colors!
-    f: fn(Complex64) -> Complex64,
+    f: impl Fn(Complex64) -> Complex64 + Sync,
 ) {
     let n = gradient.len();
     gradient.push(cp.contour_color);
-    let color = |ci: ComplexInfo| match ci {
-        ComplexInfo::Index(i) => i as u8,
-        ComplexInfo::Contour => n as u8,
+    let color = |z: Complex64| {
+        if static_contour(cp, cp.contour_width, z) {
+            n as u8
+        } else {
+            arg_index(n, z) as u8
+        }
     };
 
-    let plane_info: Vec<u8> = (0..im.height)
+    let pixels: Vec<u8> = (0..im.height)
         .into_par_iter()
         .map(|r| {
             (0..im.width)
-                .map(|c| hc![color, index_contour n cp, f , to_complex @ im, r, c ])
+                .map(|c| hc![color, f , to_complex @ im, r, c ])
                 .collect::<Vec<u8>>()
         })
         .flatten()
@@ -108,44 +143,31 @@ pub fn create_gradient_image_with_contours(
 
     let mut image = std::fs::File::create(&im.path).unwrap();
     let mut encoder = Encoder::new(&mut image, im.width, im.height, &[]).unwrap();
-    encoder.set_repeat(gif::Repeat::Infinite).unwrap();
-    let frame = gif::Frame::from_palette_pixels(im.width, im.height, &plane_info, &gradient, None);
+    //encoder.set_repeat(gif::Repeat::Infinite).unwrap();
+    let frame = gif::Frame::from_palette_pixels(im.width, im.height, &pixels, &gradient, None);
     encoder.write_frame(&frame).unwrap();
-}
-
-pub struct LoopParameters {
-    pub argument_color: [u8; 3],
-    pub background_color: [u8; 3],
-    pub angle_width: usize, // angle_width / frames of the range is highlighted
-    pub frames: u16,
 }
 
 pub fn create_loop_image(
     im: &ImageParameters,
     lp: &LoopParameters,
     cp: &ContourParameters,
-    f: fn(Complex64) -> Complex64,
+    f: impl Fn(Complex64) -> Complex64 + Sync,
 ) {
-    //?? let contour_width_in_frames = (cp.contour_width / cp.contour_spacing * (lp.frames as f64)) as u16;
-
-    fn loop_diff(i: usize, j: usize, n: usize) -> usize {
-        if j >= i {
-            j - i
-        } else {
-            j + n - i
-        }
-    }
-
-    let plane_info: Vec<Vec<ComplexInfo>> = (0..im.height)
+    let plane: &Vec<Vec<(bool, usize)>> = &(0..im.height)
         .into_par_iter()
         .map(|r| {
             (0..im.width)
-                .map(|c| hc![index_contour lp.frames.into() cp, f , to_complex @ im, r, c ])
+                .map(|c| {
+                    let z = hc![f , to_complex @ im, r, c ];
+                    (
+                        static_contour(cp, cp.contour_width, z),
+                        arg_index(lp.frames, z),
+                    )
+                })
                 .collect()
         })
         .collect();
-
-    let get_plane_info = |r: usize, c: usize| plane_info[r][c];
 
     let palette = [cp.contour_color, lp.argument_color, lp.background_color]
         .into_iter()
@@ -157,14 +179,155 @@ pub fn create_loop_image(
         .map(|i| {
             let v: Vec<u8> = (0..im.height)
                 .flat_map(|r| {
-                    (0..im.width).map(move |c| match get_plane_info(r as usize, c as usize) {
-                        ComplexInfo::Contour => 0,
-                        ComplexInfo::Index(j)
-                            if loop_diff(i.into(), j, lp.frames.into()) < lp.angle_width =>
-                        {
+                    (0..im.width).map(move |c| {
+                        let (contour, arg) = plane[r as usize][c as usize];
+                        if contour {
+                            0
+                        } else if mod_range(i, arg, lp.frames, lp.angle_width) {
                             1
+                        } else {
+                            2
                         }
-                        _ => 2,
+                    })
+                })
+                .collect();
+
+            let mut frame =
+                gif::Frame::from_palette_pixels(im.width, im.height, &v, &palette, None);
+            frame.make_lzw_pre_encoded();
+            frame
+        })
+        .collect();
+
+    let mut image = std::fs::File::create(&im.path).unwrap();
+    let mut encoder = Encoder::new(&mut image, im.width, im.height, &[]).unwrap();
+    encoder.set_repeat(gif::Repeat::Infinite).unwrap();
+    for frame in frames {
+        encoder.write_lzw_pre_encoded_frame(&frame).unwrap();
+    }
+}
+
+pub fn create_contour_loop_image(
+    im: &ImageParameters,
+    lp: &LoopParameters,
+    lcp: &LoopContourParameters,
+    f: impl Fn(Complex64) -> Complex64 + Sync,
+) {
+    let plane: &Vec<Vec<(usize, usize)>> = &(0..im.height)
+        .into_par_iter()
+        .map(|r| {
+            (0..im.width)
+                .map(|c| {
+                    let z = hc![f , to_complex @ im, r, c ];
+                    (contour_index(lcp, lp.frames, z), arg_index(lp.frames, z))
+                })
+                .collect()
+        })
+        .collect();
+
+    let palette = [lcp.contour_color, lp.argument_color, lp.background_color]
+        .into_iter()
+        .flatten()
+        .collect::<Vec<u8>>();
+
+    let frames: Vec<gif::Frame> = (0..lp.frames)
+        .into_par_iter()
+        .map(|i| {
+            let v: Vec<u8> = (0..im.height)
+                .flat_map(|r| {
+                    (0..im.width).map(move |c| {
+                        let (contour, arg) = plane[r as usize][c as usize];
+                        if mod_range(i, contour, lp.frames, lcp.contour_width) {
+                            0
+                        } else if mod_range(i, arg, lp.frames, lp.angle_width) {
+                            1
+                        } else {
+                            2
+                        }
+                    })
+                })
+                .collect();
+
+            let mut frame =
+                gif::Frame::from_palette_pixels(im.width, im.height, &v, &palette, None);
+            frame.make_lzw_pre_encoded();
+            frame
+        })
+        .collect();
+
+    let mut image = std::fs::File::create(&im.path).unwrap();
+    let mut encoder = Encoder::new(&mut image, im.width, im.height, &[]).unwrap();
+    encoder.set_repeat(gif::Repeat::Infinite).unwrap();
+    for frame in frames {
+        encoder.write_lzw_pre_encoded_frame(&frame).unwrap();
+    }
+}
+
+pub fn create_sphere_contour_loop_image(
+    im: &ImageParameters,
+    lp: &LoopParameters,
+    lcp: &LoopContourParameters,
+    sp: &SphereParameters,
+    f: impl Fn(Complex64) -> Complex64 + Sync,
+) {
+    let proj = |c: Complex64| {
+        let (x, y) = (c.re, c.im);
+        let t = sp.theta + PI;
+        let p = sp.phi;
+        let z_sq = 1.0 - x * x - y * y;
+        if z_sq < 0.0 {
+            None
+        } else {
+            let z = z_sq.sqrt();
+            let (x, y, z) = (x * p.cos() - z * p.sin(), y, x * p.sin() + z * p.cos());
+            let (x, y, z) = (x, y * t.cos() - z * t.sin(), y * t.sin() + z * t.cos());
+            Some(Complex64::new(x / (1.0 - z), y / (1.0 - z)))
+        }
+    };
+
+    let plane: &Vec<Vec<Option<(usize, usize)>>> = &(0..im.height)
+        .into_par_iter()
+        .map(|r| {
+            (0..im.width)
+                .map(|c| {
+                    hc![proj , to_complex @ im, r, c ].map(|z| {
+                        (
+                            contour_index(lcp, lp.frames, f(z)),
+                            arg_index(lp.frames, f(z)),
+                        )
+                    })
+                })
+                .collect()
+        })
+        .collect();
+
+    let palette = [
+        lcp.contour_color,
+        lp.argument_color,
+        sp.sphere_color,
+        lp.background_color,
+    ]
+    .into_iter()
+    .flatten()
+    .collect::<Vec<u8>>();
+
+    let frames: Vec<gif::Frame> = (0..lp.frames)
+        .into_par_iter()
+        .map(|i| {
+            let v: Vec<u8> = (0..im.height)
+                .flat_map(|r| {
+                    (0..im.width).map(move |c| {
+                        if let Some((contour, arg)) = plane[r as usize][c as usize] {
+                            if mod_range(i, contour, lp.frames, lcp.contour_width) {
+                                0
+                            } else if mod_range(i, arg, lp.frames, lp.angle_width) {
+                                1
+                            } else {
+                                2
+                            }
+                        } else {
+                            3
+                        }
                     })
                 })
                 .collect();
