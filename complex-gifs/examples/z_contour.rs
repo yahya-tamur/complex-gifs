@@ -8,7 +8,7 @@ fn main() {
         .expect("Please provide the output directory in the first command line argument.")
         + "/z_contour.gif";
 
-    let gradient: Vec<[u8; 3]> = (0..255).map(|x| [255, x, x]).collect();
+    let gradient: Vec<u8> = (0..255).map(|x| [255, x, x]).flatten().collect();
 
     let f = |z: Complex64| z;
 
@@ -27,7 +27,7 @@ fn main() {
             contour_width: 0.01,
             contour_color: [0, 0, 0],
         },
-        gradient,
+        &gradient,
         f,
     );
 }

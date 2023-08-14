@@ -39,6 +39,25 @@ pub struct SphereParameters {
     pub sphere_color: [u8; 3],
 }
 
+const fn generate_gradient() -> [u8; 765] {
+    let mut gradient = [0u8; 765];
+    let mut i = 0; //no for loops in const functions?????
+    while i < 85 {
+        let (rise, fall) = (3 * i as u8, 255 - 3 * i as u8);
+        gradient[3 * i] = fall;
+        gradient[3 * i + 1] = rise;
+        gradient[3 * (i + 85) + 1] = fall;
+        gradient[3 * (i + 85) + 2] = rise;
+        gradient[3 * (i + 170) + 2] = fall;
+        gradient[3 * (i + 170)] = rise;
+        i += 1;
+    }
+    gradient
+}
+
+//safe to use with and without contours
+pub const GRADIENT: [u8; 765] = generate_gradient();
+
 fn to_complex(im: &ImageParameters, r: u16, c: u16) -> Complex64 {
     let t = |x: u16| x as f64;
     Complex64::new(
@@ -89,10 +108,10 @@ fn mod_range(i: usize, j: usize, n: usize, d: usize) -> bool {
 
 pub fn create_gradient_image(
     im: &ImageParameters,
-    gradient: Vec<[u8; 3]>, //gradient must contain <= 256 colors!
+    gradient: &[u8], //gradient must contain <= 256 colors!
     f: impl Fn(Complex64) -> Complex64 + Sync,
 ) {
-    let n = gradient.len();
+    let n = gradient.len() / 3;
     let color = |i| i as u8;
 
     let pixels: Vec<u8> = (0..im.height)
@@ -105,7 +124,6 @@ pub fn create_gradient_image(
         .flatten()
         .collect();
 
-    let gradient = gradient.into_iter().flatten().collect::<Vec<u8>>();
     let mut image = std::fs::File::create(&im.path).unwrap();
     let mut encoder = Encoder::new(&mut image, im.width, im.height, &[]).unwrap();
     //encoder.set_repeat(gif::Repeat::Infinite).unwrap();
@@ -116,11 +134,13 @@ pub fn create_gradient_image(
 pub fn create_contour_gradient_image(
     im: &ImageParameters,
     cp: &ContourParameters,
-    mut gradient: Vec<[u8; 3]>, //gradient must contain <= 255 colors!
+    gradient: &[u8], //gradient must contain <= 255 colors!
     f: impl Fn(Complex64) -> Complex64 + Sync,
 ) {
-    let n = gradient.len();
-    gradient.push(cp.contour_color);
+    let n = gradient.len() / 3;
+    let mut gradient = gradient.to_vec();
+    gradient.extend_from_slice(&cp.contour_color);
+
     let color = |z: Complex64| {
         if static_contour(cp, cp.contour_width, z) {
             n as u8
@@ -138,8 +158,6 @@ pub fn create_contour_gradient_image(
         })
         .flatten()
         .collect();
-
-    let gradient = gradient.into_iter().flatten().collect::<Vec<u8>>();
 
     let mut image = std::fs::File::create(&im.path).unwrap();
     let mut encoder = Encoder::new(&mut image, im.width, im.height, &[]).unwrap();

@@ -8,17 +8,6 @@ fn main() {
         .expect("Please provide the output directory in the first command line argument.")
         + "/z_color.gif";
 
-    let mut gradient = Vec::<[u8; 3]>::with_capacity(255);
-    for i in 0..85 {
-        gradient.push([255 - 3 * i, 3 * i, 0]);
-    }
-    for i in 0..85 {
-        gradient.push([0, 255 - 3 * i, 3 * i]);
-    }
-    for i in 0..85 {
-        gradient.push([3 * i, 0, 255 - 3 * i]);
-    }
-
     let f = |z: Complex64| z;
     create_gradient_image(
         &ImageParameters {
@@ -30,7 +19,7 @@ fn main() {
             width: 500,
             height: 500,
         },
-        gradient,
+        &GRADIENT,
         f,
     );
 }
