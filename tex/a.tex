@@ -1,14 +1,34 @@
 \documentclass[xhtml, mathjax]{article}
 
-%\usepackage{fourier}
 \usepackage{graphicx}
 \usepackage{amsmath}
 \usepackage{hyperref}
 \usepackage{subcaption}
 \graphicspath{{../doc/images}}
 
-%\renewcommand{\thesubsection}{\thesection.\alph{subsection}}
+\newcommand{\singleimage}[2] {
+  \begin{figure}
+    \centering
+    \includegraphics{#1}\par
+    #2
+  \end{figure}
+}
 
+\newcommand{\doubleimage}[4] {
+  \begin{figure}
+    \centering
+    \begin{subfigure}{0.5\linewidth}
+      \centering
+      \includegraphics{#1}\par
+      #2
+    \end{subfigure}
+    \begin{subfigure}{0.5\linewidth}
+      \centering
+      \includegraphics{#3}\par
+      #4
+    \end{subfigure}
+  \end{figure}
+}
 
 \title{Visualizing Complex Functions}
 \author{}
@@ -19,7 +39,6 @@
   \CssFile[../tex/custom.css]
   \EndCssFile
 
-
   \section{About this Document}
 
     I initially came up with the idea for this document when I was reading Stein
@@ -28,8 +47,11 @@
     on my github. I haven't seen this idea anywhere else, but I wouldn't be
     surprised if someone else came up with it as well.
 
+    I was considering writing more of an introduction to the subject, but for
+    now, I decided to just feature the images with some light commentary.
+
     The code for creating the images as well as the html page is on the github
-    repo associated with this website,
+    repository,
 
     \url{https://github.com/yahya-tamur/complex-gifs}
 
@@ -54,14 +76,11 @@
     write complex numbers in polar form $(re^{i\theta} = r\cos(\theta) +
     ir\sin(\theta))$, and assign a color to every value of $\theta$. We then
     graph the complex plane, assigning every point $(a,b)$ the color $f(a + bi)$
-    represents. The following image graphs $f(z) = z$, and we can see that
-    $\theta = 0$ is assigned red, $\theta
-    = \frac{2\pi}{3}$ is green, $\theta = \pi$ is somewhere between blue and
-    green.
+    represents. The following image graphs $f(z) = z$, and we can see that here,
+    $\theta = 0$ is assigned red, $\theta = \frac{2\pi}{3}$ is green, $\theta =
+    \pi$ is somewhere between blue and green.
 
-    \begin{center}
-      \includegraphics{z_color.gif}
-    \end{center}
+    \singleimage{z_color.gif}{}
 
     The reason it's a color wheel and not something like a gradient is because
     the colors can be the same value at $0$ and $2\pi$, so similar values of
@@ -73,9 +92,7 @@
     similar to topographical maps. The gradient also goes from red to white from
     $0$ to $2\pi$ to illustrate the previous point.
 
-    \begin{center}
-      \includegraphics{z_contour.gif}
-    \end{center}
+    \singleimage{z_contour_gradient.gif}{}
 
     The novelty of this document is that instead of color, we represent each
     value of $\theta$ as a point in time in a moving image. In the image below,
@@ -85,37 +102,28 @@
     the first frames is equivalent to the difference between the first and
     second frames.
 
-    \begin{center}
-      \includegraphics{z_loop.gif}
-    \end{center}
+    \singleimage{z_loop.gif}{}
 
     It can be hard to tell which direction $|f(z)|$ increases by looking only at
     the contour lines. In the image below, the contour lines move from lower to
     higher values.
 
-
-    \begin{center}
-      \includegraphics{z_contour_loop.gif}
-    \end{center}
+    \singleimage{z_contour_loop.gif}{}
 
     While graphing $\frac{1}{z}$, notice that$\frac{1}{re^{\theta i}} =
     \frac{1}{r}e^{-\theta i}$, so in addition to the contour lines moving in
     instead of out, the selected pixels moves clockwise instead of
     counterclockwise:
 
-    \begin{figure}
-      \centering
-      \includegraphics{inv.gif}\par
-      $f(z) = \frac{1}{z}$
-    \end{figure}
+    \singleimage{inv.gif}{$f(z) = \frac{1}{z}$}
 
-    This process does create very interesting looking Moire patterns.
+    Here's $f(z) = z$, graphed on the stereographic projection of the complex
+    plane onto a sphere:
 
+    Notice that the function $f(z) = z$ looks like $f(z) = \frac{1}{z}$ on the
+    opposite pole, which represents the point at infinity.
 
-  \section{Holomorphic Functions}
-
-    I might write some actual introduction to holomorphic functions here later,
-    but for now, I just decided to put in the images with a few comments.
+    \singleimage{z_sphere.gif}{}
 
     Consider the linear function $a(z-b)$. $z-b$ is exactly the
     function we've seen before except the origin moved to $b$, and since
@@ -123,89 +131,131 @@
     \theta_2)}$, multiplying by $a$ has the effect of the rotation starting at a
     different angle, and the contour lines having a different spacing:
 
-    \begin{figure}
-      \centering
-      \begin{subfigure}{0.5\linewidth}
-        \centering
-        \includegraphics{linear_1.gif}\par
-        $f(z)=5i(z-2)$
-      \end{subfigure}
-      \begin{subfigure}{0.5\linewidth}
-        \centering
-        \includegraphics{linear_2.gif}\par
-        $f(z)=0.5(z-(3+2i))$
-      \end{subfigure}
-    \end{figure}
+    \doubleimage{linear_1.gif}{$f(z)=5i(z-2)$}{linear_2.gif}{$f(z)=0.5(z-(3+2i))$}
 
     Since two unique values of $\theta$, on opposite sides of the unit circle,
     solve $z^2 = C$, here's what $f(z) = z^2$ looks like:
 
-    \begin{figure}
-      \centering
-      \includegraphics{poly_1.gif}\par
-      $f(z) = z^2$
-    \end{figure}
+    \singleimage{poly_1.gif}{$f(z)=z^2$}
+
+    The contour lines are created by checking if
+
+    \[|f(z)| \mod \text{(contour width)} < \text{some small value}\]
+
+    So, having a thicker contour line means there
+    are more pixels within this small value. In other words, a thicker contour
+    line means $|f(z)|$ is increasing more slowly. In $z^2$ above, the contour
+    lines get thinner and thinner, since the slope of $|f(z)|$ increases towards
+    the outside, and in the graphs of the linear functions, the contour lines
+    have the same thickness throughout, since $|f(z)|$ increases at a constant
+    rate. This is also the reason the red lines get thicker at a constant rate
+    as they go towards the outside.
 
     And here's what it looks like there are two roots next to each other instead
     of a single double root:
 
-    \begin{figure}
-      \centering
-      \includegraphics{poly_2.gif}\par
-      $f(z) = z^2 + 1$
-    \end{figure}
+    \singleimage{poly_2.gif}{$f(z)=z^2+1$}
 
-    And here's a seven-root:
+    \singleimage{poly_3.gif}{$f(z)=z^3$}
 
-    \begin{figure}
-      \centering
-      \includegraphics{poly_3.gif}\par
-      $f(z) = z^7$
-    \end{figure}
+    \singleimage{poly_7.gif}{$f(z)=\frac{1}{z^3}$}
 
+    \singleimage{poly_4.gif}{$f(z)=z^7$}
 
     Every holomorphic function is equal to a power series, however this doesn't
     mean they always look like a countable set of roots. Below, we have
     increasing partial sums for $e^z = \sum_{n=1}^\infty \frac{z^n}{n!}$,
     graphed on the same scale.
 
-    \begin{figure}
-      \centering
-      \includegraphics{exp_sum_to_5.gif}\par
-      $f(z) = \sum_{n=0}^4 \frac{z^n}{n!}$
-    \end{figure}
+    Notice that the function below goes to $1$ as it goes to $1$ as $|z|$ goes
+    to infinity, so contour lines kind of wrap around the point at infinity.
 
-    \begin{figure}
-      \centering
-      \includegraphics{exp_sum_to_10.gif}\par
-      $f(z) = \sum_{n=0}^9x \frac{z^n}{n!}$
-    \end{figure}
+    \singleimage{poly_5.gif}{$f(z)=\left(\frac{z^4}{(z-2)(z+2)(z-2i)(z+2i)}\right)^5$}
 
-    \begin{figure}
-      \centering
-      \includegraphics{exp_sum_to_20.gif}\par
-      $f(z) = \sum_{n=0}^{19} \frac{z^n}{n!}$
-    \end{figure}
+    And here's what something like that looks on the sphere:
 
-    \begin{figure}
-      \centering
-      \includegraphics{exp.gif}\par
-      $f(z) = e^z = \sum_{n=0}^\infty \frac{z^n}{n!}$
-    \end{figure}
+    \singleimage{sphere_poly_2.gif}{$f(z)=\frac{z}{1-z}$}
 
-  And if you think about it, the power series doesn't converge uniformly, so
-  every partial sum will be closer to the limit in the center and pretty far
-  from it towards the outside.
+    The unit circle becomes the equator on the stereographic projection, so the
+    pole is on the equator in that image.
 
-  Here's the inverse stereographic projection of the complex plane,
-  onto a sphere. Notice that the function $f(z) = z$ looks like $f(z) =
-  \frac{1}{z}$ on the opposite pole, which represents a point at infinity.
+    \singleimage{sphere_poly_1.gif}{$f(z)=\frac{z}{0.5-z}$}
 
-    \begin{figure}
-      \centering
-      \includegraphics{z_sphere.gif}\par
-      $f(z) = z$
-    \end{figure}
+    \singleimage{sphere_poly_3.gif}{$f(z)=\frac{z^4}{(z - 0.5)(z + 0.5)(z -
+    0.5i)(z + 0.5i)}$}
+
+    \singleimage{poly_6.gif}{$f(z)=\frac{(z-i)^2(z-4i)^3(z-2)^5}{z+i}$}
+
+    Sin looks like a countable set of roots where you would expect them:
+
+    \singleimage{sin.gif}{$f(z)=\sin(z)$}
+
+    Here are partial sums of the power series of $e^z$:
+
+    \singleimage{exp_sum_to_5.gif}{$f(z) = \sum_{n=0}^5 \frac{z^n}{n!}$}
+
+    \singleimage{exp_sum_to_10.gif}{$f(z) = \sum_{n=0}^{10} \frac{z^n}{n!}$}
+
+    \singleimage{exp_sum_to_20.gif}{$f(z) = \sum_{n=0}^{20} \frac{z^n}{n!}$}
+
+    \singleimage{exp.gif}{$f(z) = e^z = \sum_{n=0}^\infty \frac{z^n}{n!}$}
+
+    Notice that the $n$'th partial sum has $n$ roots (every complex polynomial
+    of degree $n$ has $n$ roots counting multiplicities), while $e^z$ has no
+    roots.
+
+    The power series doesn't converge uniformly, so every partial sum will be
+    closer to the limit in the center and pretty far from it towards the
+    outside. You can also see this by graphing $e^x$ as a funtion of real
+    numbers.
+
+    About the graph of $e^z$ itself, $f(a+bi) = e^{a+bi}$ has $r = e^a$ and
+    $\theta = b$, which is why the graph looks like that.
+
+    $e^{\frac{1}{z}}$ has a very common example of an essential singularity,
+    which is a point around which the function is pretty well-behaved
+    (holomorphic), but on which, the function goes to infinity unlike
+    $\frac{1}{z^n}$ for any $n$.
+
+    \singleimage{exp_inv.gif}{$f(z)=e^{\frac{1}{z}}$}
+
+    On the sphere, the point at infinity of $e^z$ would look like this. In the
+    image below, the sphere is rotated in the opposite direction to the spheres
+    we've seen before, so the origin is out of view.
+
+    \singleimage{exp_inv_sphere.gif}{$f(z)=e^{z}$}
+
+    % !! verify and contextualize if you want to add this:
+    % Many standard theorems for complex analysis are either for holomorphic
+    % functions on the whole complex plane or an arbitrary open subset of the
+    % complex plaane Riemann Mapping Theorem, complex manifolds, etc.
+
+    Here's $\ln(x)$ with two different branch cuts:
+
+    \singleimage{log_1.gif}{}
+
+    \singleimage{log_2.gif}{}
+
+    \singleimage{exp.gif}{$f(z)=e^z$}
+
+    \singleimage{exp_2.gif}{$f(z)=e^{e^z}$}
+
+    \singleimage{exp_3.gif}{$f(z)=e^{e^{e^z}}$}
+
+    \singleimage{exp_4.gif}{$f(z)=e^{e^{e^{e^z}}}$}
+
+    \singleimage{exp_5.gif}{$f(z)=e^{e^{e^{e^{e^z}}}}$}
+
+    This next one is in domain coloring again:
+
+    \singleimage{sin_series.gif}{$f(z)=\sum_{k=0}^{300} \frac{e^{2^k
+    z}}{1.1^k}$}
+
+    $f(x) = \sum_{k=0}^\infty \frac{e^{i2^kx}}{2^{\alpha k}}$ is continuous but
+    nowhere differentiable for $0 < \alpha < 1$, as a function that takes a real
+    number and returns a complex number. The function $f(a+bi) =
+    \sum_{k=0}^\infty \frac{e^{2^k(a+bi)}}{2^{\alpha k}}$ clearly converges
+    faster with negative $a$ and diverges with positive $a$.
 
   \end{document}
 

@@ -29,7 +29,7 @@ pub struct LoopContourParameters {
 pub struct LoopParameters {
     pub argument_color: [u8; 3],
     pub background_color: [u8; 3],
-    pub angle_width: usize, // angle_width / frames of the range is highlighted
+    pub angle_width: usize,
     pub frames: usize,
 }
 
@@ -108,7 +108,11 @@ fn mod_range(i: usize, j: usize, n: usize, d: usize) -> bool {
 
 pub fn create_gradient_image(
     im: &ImageParameters,
-    gradient: &[u8], //gradient must contain <= 256 colors!
+    // gradient must contain <= 256 colors.
+    // Conforming to the gif crate, this is a 3*<number of colors> slice
+    // containing the red value, then the green value, then the blue value for
+    // every color.
+    gradient: &[u8],
     f: impl Fn(Complex64) -> Complex64 + Sync,
 ) {
     let n = gradient.len() / 3;
@@ -126,15 +130,19 @@ pub fn create_gradient_image(
 
     let mut image = std::fs::File::create(&im.path).unwrap();
     let mut encoder = Encoder::new(&mut image, im.width, im.height, &[]).unwrap();
-    //encoder.set_repeat(gif::Repeat::Infinite).unwrap();
-    let frame = gif::Frame::from_palette_pixels(im.width, im.height, &pixels, &gradient, None);
+    let frame = gif::Frame::from_palette_pixels(im.width, im.height, &pixels, gradient, None);
     encoder.write_frame(&frame).unwrap();
 }
 
 pub fn create_contour_gradient_image(
     im: &ImageParameters,
     cp: &ContourParameters,
-    gradient: &[u8], //gradient must contain <= 255 colors!
+    // gradient must contain <= 255 colors, since one color is alloted for the
+    // contour.
+    // Conforming to the gif crate, this is a 3*<number of colors> slice
+    // containing the red value, then the green value, then the blue value for
+    // every color.
+    gradient: &[u8],
     f: impl Fn(Complex64) -> Complex64 + Sync,
 ) {
     let n = gradient.len() / 3;
@@ -161,7 +169,6 @@ pub fn create_contour_gradient_image(
 
     let mut image = std::fs::File::create(&im.path).unwrap();
     let mut encoder = Encoder::new(&mut image, im.width, im.height, &[]).unwrap();
-    //encoder.set_repeat(gif::Repeat::Infinite).unwrap();
     let frame = gif::Frame::from_palette_pixels(im.width, im.height, &pixels, &gradient, None);
     encoder.write_frame(&frame).unwrap();
 }

@@ -1,8 +1,10 @@
-use complex_gifs::gifs::*;
-use num_complex::Complex64;
-use std::env;
+// use complex_gifs::gifs::*;
+// use num_complex::Complex64;
+// use std::env;
 
 fn main() {
+    println!("in progress!");
+    /*
     let path = env::args()
         .nth(1)
         .expect("Please provide the output directory in the first command line argument.")
@@ -17,8 +19,8 @@ fn main() {
             x_end: 10.0,
             y_start: -10.0,
             y_end: 10.0,
-            width: 500,
-            height: 500,
+            width: 1000,
+            height: 1000,
         },
         &LoopParameters {
             argument_color: [100, 0, 0],
@@ -33,4 +35,5 @@ fn main() {
         },
         f,
     );
+    */
 }

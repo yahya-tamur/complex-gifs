@@ -7,7 +7,7 @@ fn main() {
         .nth(1)
         .expect("Please provide the output directory in the first command line argument.");
 
-    for n in 1..=5 {
+    for n in 2..=5 {
         let f = |z: Complex64| {
             let mut ans = z;
             for _ in 0..n {
@@ -18,13 +18,13 @@ fn main() {
 
         create_contour_loop_image(
             &ImageParameters {
-                path: format!("{path}/exp{n}.gif"),
+                path: format!("{path}/exp_{n}.gif"),
                 x_start: -10.0,
                 x_end: 10.0,
                 y_start: -10.0,
                 y_end: 10.0,
-                width: 500,
-                height: 500,
+                width: 1000,
+                height: 1000,
             },
             &LoopParameters {
                 argument_color: [100, 0, 0],

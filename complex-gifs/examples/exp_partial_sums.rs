@@ -1,5 +1,4 @@
 use complex_gifs::gifs::*;
-use complex_gifs::math::*;
 use num_complex::Complex64;
 use std::env;
 
@@ -8,11 +7,19 @@ fn main() {
         .nth(1)
         .expect("Please provide the output directory in the first command line argument.");
 
-    let term_limits = [5, 10, 20];
+    for n in [5, 10, 20] {
+        let f = |z: Complex64| {
+            let mut ans = Complex64::new(1.0, 0.0);
 
-    for n in term_limits {
-        let poly = (1..n).map(|k| 1.0 / (k as f64)).collect::<Vec<f64>>();
-        let f = |z: Complex64| eval_progressive_poly(&poly, z);
+            let mut term = Complex64::new(1.0, 0.0);
+
+            for k in 1..=n {
+                term *= z / (k as f64);
+                ans += term;
+            }
+
+            ans
+        };
 
         create_contour_loop_image(
             &ImageParameters {
@@ -21,8 +28,8 @@ fn main() {
                 x_end: 10.0,
                 y_start: -10.0,
                 y_end: 10.0,
-                width: 500,
-                height: 500,
+                width: 1000,
+                height: 1000,
             },
             &LoopParameters {
                 argument_color: [100, 0, 0],

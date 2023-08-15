@@ -151,7 +151,12 @@ figure.figure img.graphics {
 }
 
 img {
-  width: min(500pt, 100%);
+  width: min(1000px, 100%);
+}
+
+p,
+.cmtt-10 {
+  font-family: "Times New Roman", Times, serif;
 }
 
   

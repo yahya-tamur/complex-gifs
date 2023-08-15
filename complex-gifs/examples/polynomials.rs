@@ -1,5 +1,4 @@
 use complex_gifs::gifs::*;
-use complex_gifs::math::*;
 use num_complex::Complex64;
 use std::env;
 
@@ -8,24 +7,33 @@ fn main() {
         .nth(1)
         .expect("Please provide the output directory in the first command line argument.");
 
-    let polys = vec![
-        vec![0.0, 0.0, 1.0],
-        vec![2.0, 0.0, 1.0],
-        vec![0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0],
+    let fs = [
+        |z: Complex64| z * z,
+        |z: Complex64| z * z + 2.0,
+        |z: Complex64| z * z * z,
+        |z: Complex64| z * z * z * z * z * z * z,
+        |z: Complex64| {
+            let i = Complex64::i();
+            (z * z * z * z / (z - 2.0) / (z + 2.0) / (z - 2.0 * i) / (z + 2.0 * i)).powi(5)
+        },
+        |z: Complex64| {
+            let i = Complex64::i();
+            0.0001 * ((z - i).powi(2)) * ((z - 4.0 * i).powi(3)) * ((z - 2.0).powi(5))
+                / (z + 1.0 * i)
+        },
+        |z: Complex64| 100.0 / z / z / z,
     ];
 
-    for (i, poly) in polys.iter().enumerate() {
-        let f = |z: Complex64| eval_poly(poly, z);
-
+    for (i, f) in fs.iter().enumerate() {
         create_contour_loop_image(
             &ImageParameters {
                 path: format!("{path}/poly_{}.gif", i + 1),
-                x_start: -10.0,
-                x_end: 10.0,
-                y_start: -10.0,
-                y_end: 10.,
-                width: 500,
-                height: 500,
+                x_start: -5.0,
+                x_end: 5.0,
+                y_start: -5.0,
+                y_end: 5.0,
+                width: 1000,
+                height: 1000,
             },
             &LoopParameters {
                 argument_color: [100, 0, 0],
