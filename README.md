@@ -9,13 +9,13 @@ https://github.com/yahya-tamur/Visualising-Complex-Functions
 My biggest problem with that one was that it was hard to see what the point was
 with just a folder of images and some code. I decided to make this version
 after realizing that I could put animated gifs in a tex document if I compiled
-it to hmtl with htlatex instead of to pdf. This also had the advantage of being
+it to html with htlatex instead of to pdf. This also had the advantage of being
 easier to share, especially when hosted on github pages.
 
-This version also adds the stereographic projection images, domain coloring
-images to introduce the idea more gradually and more visually. It's
-multi-threaded. It also contains all the code for the images in the document, and
-makes it easier to add more with a nice api.
+This version also adds the stereographic projection, and the domain coloring
+for introducing the idea more gradually and more visually. It's multi-threaded.
+It contains the code for all the images in the document, and makes it easier
+to add more with a nice api.
 
 gif is an interesting file format for this purpose.
 
@@ -23,10 +23,13 @@ It's compressed losslessly, and this process does sometimes make patterns (like
 clouds of dots) which lossy formats like mp4 can mess up.
 
 It's pretty easy to work with -- a frame is just a flattened 2d array of colors
-(which is losslessly compressed by the library). This also means the math behind
-rendering the plane or the sphere is done manually, though it is pretty simple.
+(which is losslessly compressed by the library). This also means the math
+behind rendering the plane or the sphere is done manually, though it is pretty
+simple.
 
-Viewing the images is cross-platform.
+Viewing the images is cross-platform. I was worried they might be a little hard
+to view since they're pretty large, but it did work on a pretty cheap android
+phone.
 
 There is a separate compilation step, but this also means none of the math is
 being done by the computer viewing the image. There's no way to add

@@ -1,5 +1,3 @@
-/* css.sty */
-
 body {
   font-size: 14pt;
   width: 70%;
@@ -18,6 +16,8 @@ img {
 }
 
 p,
-.cmtt-10 {
+span.cmtt-10 {
   font-family: "Times New Roman", Times, serif;
 }
+
+/* css.sty */
