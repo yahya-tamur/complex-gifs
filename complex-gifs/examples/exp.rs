@@ -17,8 +17,8 @@ fn main() {
             x_end: 10.0,
             y_start: -10.0,
             y_end: 10.0,
-            width: 1000,
-            height: 1000,
+            width: 700,
+            height: 700,
         },
         &LoopParameters {
             argument_color: [100, 0, 0],

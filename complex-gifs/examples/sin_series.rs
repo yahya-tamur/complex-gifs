@@ -28,8 +28,8 @@ fn main() {
             x_end: 1.0,
             y_start: -1.0,
             y_end: 1.0,
-            width: 2000,
-            height: 2000,
+            width: 1000,
+            height: 1000,
         },
         &ContourParameters {
             contour_spacing: 0.3,
