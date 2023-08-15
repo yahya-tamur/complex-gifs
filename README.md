@@ -72,7 +72,6 @@ by copying one of the existing ones and running with the command written above.
 
 ## Goals
 
-- (is it done?) figure out the fonts
 - complex powers. z^a, a^z, etc.
 
 ### Done:
@@ -86,3 +85,4 @@ by copying one of the existing ones and running with the command written above.
 - short writeup, like 5 pages max.
 - graph more things, especially with the sphere, fourier series, e^e^e^z, ...
 - Go over the document. How much do you expect a reader to know?
+- (hopefully done) figure out the fonts
