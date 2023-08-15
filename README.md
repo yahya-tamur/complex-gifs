@@ -29,7 +29,7 @@ simple.
 
 Viewing the images is cross-platform. I was worried they might be a little hard
 to view since they're pretty large, but it did work on a pretty cheap android
-phone.
+phone. All the images combined is 115 MB, so it might load pretty slowly.
 
 There is a separate compilation step, but this also means none of the math is
 being done by the computer viewing the image. There's no way to add
